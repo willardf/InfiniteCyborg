@@ -1,0 +1,56 @@
+﻿using libtcod;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace InfCy.GameCore
+{
+    class Enemy : Mover
+    {
+        public Weapon weapon = Weapon.Fists;
+
+        public Enemy()
+        {
+            Demeanor = Hostile.Enemy;
+        }
+
+        public void takeTurn()
+        {
+            var randy = TCODRandom.getInstance();
+            var dx = randy.getInt(-1, 1);
+            var dy = randy.getInt(-1, 1);
+            var enemies = Game.CurrentGame.findEnemies(this, weapon, X + dx, Y + dy);
+            if (enemies.Length > 0)
+            {
+                weapon.attack(this, enemies[0]);
+            }
+            else
+            {
+                Move(dx, dy);
+            }
+        }
+
+        public void draw(Camera root)
+        {
+            root.setChar(X, Y, Name[0]);
+        }
+
+        public void drawInfo(Camera root, int y)
+        {
+            root.print(1, y, "{0}: {1}/{2}", Name, Health, MaxHealth);
+        }
+
+        protected override void OnDeath(Mover killer)
+        {
+            base.OnDeath(killer);
+            Game.CurrentGame.RemoveEnemy(this);
+        }
+
+        protected override void OnMove()
+        {
+            
+        }
+    }
+}
