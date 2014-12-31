@@ -6,32 +6,39 @@ using System.Threading.Tasks;
 
 namespace InfCy.Genetics
 {
-    internal class BitField
+    public class BitField
     {
-        private const int INTLEN = sizeof(long) * 8;
-        public  int Length {get; private set; }
+        private const int DataSize = sizeof(long) * 8;
         private long[] data;
+
         public BitField(int len)
         {
             Length = len;
             data = new long[len / sizeof(long) + 1];
         }
 
-        public void Randomize(Func<bool> randy)
+        public void CopyBits(BitField src, int start, int len)
+        {
+            for (int i = start; i < len; ++i) this[i] = src[i];
+        }
+
+        public BitField Randomize(Func<bool> randy)
         {
             for (int i = 0; i < this.Length; ++i)
             {
                 this[i] = randy();
             }
+
+            return this;
         }
 
-        private long get(int bit, int nBits = 1)
+        private long Get(int bit, int nBits = 1)
         {
-            int idx = bit / INTLEN;
-            int end = (bit + nBits) / INTLEN;
+            int idx = bit / DataSize;
+            int end = (bit + nBits) / DataSize;
 
-            int b = bit % INTLEN;
-            int select = Math.Min(INTLEN - b, nBits);
+            int b = bit % DataSize;
+            int select = Math.Min(DataSize - b, nBits);
             long mask = (1L << select) - 1L;
             long output = ((this.data[idx] >> b) & mask);
 
@@ -44,33 +51,33 @@ namespace InfCy.Genetics
             return output;
         }
 
-        private void set(int bit, int nBits = 1, long value = 0)
+        private void Set(int bit, int nBits = 1, long value = 0)
         {
-            int idx = bit / INTLEN;
-            int end = (bit + nBits) / INTLEN;
+            int idx = bit / DataSize;
+            int end = (bit + nBits) / DataSize;
 
-            var b = bit % INTLEN;
-            int select = Math.Min(INTLEN - b, nBits);
+            var b = bit % DataSize;
+            int select = Math.Min(DataSize - b, nBits);
             long mask = (1L << select) - 1L;
             this.data[idx] &= ~(mask << b);
             this.data[idx] |= (value & mask) << b;
 
             if (idx != end)
             {
-                this.set(bit + select, nBits - select, value >> select);
+                this.Set(bit + select, nBits - select, value >> select);
             }
         }
 
         public long this[int bit, int len]
         {
-            get { return get(bit, len); }
-            set { set(bit, len, value); }
+            get { return Get(bit, len); }
+            set { Set(bit, len, value); }
         }
 
         public bool this[int bit]
         {
-            get { return get(bit, 1) != 0; }
-            set { set(bit, 1, (value ? 1 : 0)); }
+            get { return Get(bit, 1) != 0; }
+            set { Set(bit, 1, (value ? 1 : 0)); }
         }
 
         public bool this[Bit bit]
@@ -81,11 +88,11 @@ namespace InfCy.Genetics
 
         public long this[BitSet b]
         {
-            get { return this[b.Start, b.Length] - (b.Signed ? 1 << (b.Length - 1) : 0); }
-            set { this[b.Start, b.Length] = value + (b.Signed ? 1 << (b.Length - 1) : 0); }
+            get { return this[b.Start, b.Length] + b.MinValue; }
+            set { this[b.Start, b.Length] = value - b.MinValue; }
         }
 
-        public static BitField operator&(BitField a, BitField b)
+        public static BitField operator &(BitField a, BitField b)
         {
             BitField output = new BitField(Math.Max(a.Length, b.Length));
 
@@ -139,9 +146,10 @@ namespace InfCy.Genetics
             return data.Sum(d => d.GetHashCode());
         }
 
-        public override string ToString() {
+        public override string ToString()
+        {
             StringBuilder sb = new StringBuilder(this.Length);
-            
+
             for (int i = 0; i < this.Length; ++i)
             {
                 sb.Insert(0, this[i] ? '1' : '0');
@@ -149,5 +157,7 @@ namespace InfCy.Genetics
 
             return sb.ToString();
         }
+
+        public int Length { get; private set; }
     }
 }

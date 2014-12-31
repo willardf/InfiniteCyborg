@@ -5,7 +5,7 @@ using System.Text;
 
 namespace InfCy.Genetics
 {
-    class Bit
+    public class Bit
     {
         public int Start { get; private set; }
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace InfCy.Genetics
 {
-    static class BitFieldExtensions
+    public static class BitFieldExtensions
     {
         public static BitField RandomAnd(this BitField a, BitField b, Func<bool> randy)
         {

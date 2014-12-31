@@ -54,6 +54,7 @@
     <Compile Include="GameCore\Map.cs" />
     <Compile Include="GameCore\Mover.cs" />
     <Compile Include="Genetics\Bit.cs" />
+    <Compile Include="Genetics\Optimizer.cs" />
     <Compile Include="Lights\ConeLight.cs" />
     <Compile Include="Lights\FOVSolver.cs" />
     <Compile Include="Lights\Light.cs" />
