@@ -51,6 +51,7 @@ namespace InfCy.Maths
 
         public static IntVector operator-(IntVector a, IntVector b) { return a.Sub(b.X, b.Y); }
         public static IntVector operator +(IntVector a, IntVector b) { return new IntVector(a.X + b.X, a.Y + b.Y); }
+        public static IntVector operator *(IntVector a, int b) { return new IntVector(a.X * b, a.Y * b); }
 
         internal IntVector Sub(int x, int y)
         {

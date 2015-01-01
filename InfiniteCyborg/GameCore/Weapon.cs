@@ -14,6 +14,8 @@ namespace InfCy.GameCore
     {
         BitField data;
 
+        // TODO: Weapons have component hardpoints (Which might be "weapons")
+
         private const int DmgShift = 10;
         private readonly static BitSet DamageBits = new BitSet(0, 5, true); // -6 - 25
         private readonly static Bit MalfunctionBits = new Bit(DamageBits.End);
@@ -26,6 +28,7 @@ namespace InfCy.GameCore
         private readonly static Bit NeedsAmmoBits = new Bit(CoolDownLeftBits.End);
         private readonly static BitSet AmmoBits = new BitSet(NeedsAmmoBits.End, 8); // 0 - 255
         private readonly static BitSet AmmoLeftBits = new BitSet(AmmoBits.End, 8); // 0 - 255
+        private readonly static BitSet SpeedBits = new BitSet(AmmoLeftBits.End, 8, true); // -128 - 127
 
         public Weapon()
         {
@@ -83,6 +86,7 @@ namespace InfCy.GameCore
         public bool NeedsAmmo { get { return data[NeedsAmmoBits.Start]; } set { data[NeedsAmmoBits.Start] = value; } }
         public byte Ammo { get { return (byte)data[AmmoBits]; } set { data[AmmoBits] = value; } }
         public byte AmmoLeft { get { return (byte)data[AmmoLeftBits]; } set { data[AmmoLeftBits] = value; } }
+        public int Speed { get { return (byte)data[SpeedBits]; } set { data[SpeedBits] = value; } }
 
         public override string ToString()
         {
@@ -100,6 +104,12 @@ namespace InfCy.GameCore
         {
             Logger.Log("{0} dealt {1} damage to {2}", attacker.Name, Damage, defender.Name);
             defender.TakeDamage(this.Damage, attacker);
+            if (Push != 0)
+            {
+                var vec = (defender.Position - attacker.Position);
+                vec.Norm();
+                defender.Push(vec, Push, attacker);
+            }
         }
     }
 }

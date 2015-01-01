@@ -8,7 +8,19 @@ namespace InfCy.GameCore
 {
     class Player : Mover
     {
+        #region Stats
+        public byte Pyro { get; set; }
+        public byte Elec { get; set; }
+        public byte Aero { get; set; }
+        public byte Aqua { get; set; }
+        public byte Smithy { get; set; }
+        #endregion
+
         public Weapon MainWeapon { get; set; }
+
+        // TODO: Bodyparts which have weapon hardpoints
+        // TODO: Bodytypes which have bodypart hardpoints
+        // TODO: Weight which affects move speed
 
         public Player()
         {
