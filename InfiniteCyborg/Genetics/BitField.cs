@@ -17,9 +17,10 @@ namespace InfCy.Genetics
             data = new long[len / sizeof(long) + 1];
         }
 
-        public void CopyBits(BitField src, int start, int len)
+        public BitField CopyBits(BitField src, int start, int len)
         {
             for (int i = start; i < len; ++i) this[i] = src[i];
+            return this;
         }
 
         public BitField Randomize(Func<bool> randy)
