@@ -9,7 +9,7 @@ using InfCy.Lights;
 
 namespace InfCy.GameCore
 {
-    public class Game : IDisposable
+    public class Game : IScreen
     {
         TCODRandom randy = TCODRandom.getInstance();
         List<Enemy> enemies = new List<Enemy>();

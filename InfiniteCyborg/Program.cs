@@ -14,6 +14,8 @@ namespace InfCy
 
         TCODConsole root;
 
+        Stack<IScreen> Screens = new Stack<IScreen>();
+
         public void run()
         {
             bool running = true;
@@ -24,11 +26,13 @@ namespace InfCy
             DateTime date = new DateTime();
             using (Game game = new Game(root))
             {
+                Screens.Push(game);
                 Controls controls = new Controls();
-                controls.AddCallback(game.handleKey);
 
                 do
                 {
+                    var topScreen = Screens.Peek();
+
                     var frameTime = DateTime.Now - date;
                     var key = TCODConsole.checkForKeypress((int)TCODKeyStatus.KeyPressed);
 
@@ -44,13 +48,14 @@ namespace InfCy
                             running = false;
                         }
 
-                        controls.update(key);
+                        controls.update(key, topScreen.handleKey);
                     }
 
-                    game.update(); // TODO: Timestamp
+                    
+                    topScreen.update(); // TODO: Timestamp
 
                     root.clear();
-                    game.draw();
+                    topScreen.draw();
                     root.print(0, 0, ((int)(1 / (frameTime.TotalSeconds + .01))).ToString());
 
                     TCODConsole.flush();

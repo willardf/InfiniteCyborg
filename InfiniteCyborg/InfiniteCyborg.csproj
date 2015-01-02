@@ -52,6 +52,7 @@
     <Compile Include="GameCore\Controls.cs" />
     <Compile Include="GameCore\Enemy.cs" />
     <Compile Include="GameCore\Game.cs" />
+    <Compile Include="GameCore\IScreen.cs" />
     <Compile Include="GameCore\Logger.cs" />
     <Compile Include="GameCore\Map.cs" />
     <Compile Include="GameCore\Mover.cs" />

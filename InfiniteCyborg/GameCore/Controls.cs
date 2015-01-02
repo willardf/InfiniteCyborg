@@ -10,7 +10,6 @@ namespace InfCy.GameCore
     public enum Buttons { Up, Left, Right, Down, UpLeft, DownLeft, UpRight, DownRight, Lights }
     class Controls
     {
-        List<Action<Buttons>> callbacks = new List<Action<Buttons>>();
         readonly static Dictionary<TCODKeyCode, Buttons> ButtonMap = new Dictionary<TCODKeyCode, Buttons>()
         {
             { TCODKeyCode.Left, Buttons.Left },
@@ -29,26 +28,21 @@ namespace InfCy.GameCore
             { ',', Buttons.DownRight }
         };
 
-        public void AddCallback(Action<Buttons> b)
-        {
-            callbacks.Add(b);
-        }
-
-        public void update(TCODKey key)
+        public void update(TCODKey key, Action<Buttons> callback)
         {
             Buttons b;
             if (key.KeyCode == TCODKeyCode.Char)
             {
                 if (KeyMap.TryGetValue(key.Character, out b))
                 {
-                    callbacks.ForEach(c => c(b));
+                    callback(b);
                 }
             }
             else
             {
                 if (ButtonMap.TryGetValue(key.KeyCode, out b))
                 {
-                    callbacks.ForEach(c => c(b));
+                    callback(b);
                 }
             }
         }
