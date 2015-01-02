@@ -28,7 +28,7 @@ namespace InfCy.GameCore
             { ',', Buttons.DownRight }
         };
 
-        public void update(TCODKey key, Action<Buttons> callback)
+        public void Update(TCODKey key, Action<Buttons> callback)
         {
             Buttons b;
             if (key.KeyCode == TCODKeyCode.Char)

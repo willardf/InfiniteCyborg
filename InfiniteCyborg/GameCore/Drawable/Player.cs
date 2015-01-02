@@ -38,12 +38,12 @@ namespace InfCy.GameCore
             };
         }
 
-        public override void draw(Camera root)
+        public override void Draw(Camera root)
         {
             root.setChar(X, Y, '@');
         }
 
-        public override void drawInfo(Camera info, int y)
+        public override void DrawInfo(Camera info, int y)
         {
             info.print(1, y, "Health {0}/{1}", Health, MaxHealth);
             for (int i = 0; i < Hardpoints.Count; ++i)
@@ -52,7 +52,7 @@ namespace InfCy.GameCore
             }
         }
 
-        public bool handleKey(Buttons key)
+        public bool HandleKey(Buttons key)
         {
             var dx = 0;
             var dy = 0;
@@ -90,7 +90,7 @@ namespace InfCy.GameCore
                     return false;
             }
 
-            var enemies = Game.CurrentGame.findEnemies(this, Hardpoints.First(), X + dx, Y + dy);
+            var enemies = Game.CurrentGame.FindEnemies(this, Hardpoints.First(), X + dx, Y + dy);
             if (enemies.Length > 0)
             {
                 Battle.ResolveAttack(this, Hardpoints.First(), enemies[0]);
@@ -105,7 +105,7 @@ namespace InfCy.GameCore
 
         protected override void OnMove()
         {
-            Game.CurrentMap.updateFov(this.X, this.Y);
+            Game.CurrentMap.UpdateFov(this.X, this.Y);
         }
 
         public void Dispose()

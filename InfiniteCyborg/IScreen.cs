@@ -4,8 +4,8 @@ namespace InfCy
 {
     interface IScreen : IDisposable
     {
-        void draw();
-        void handleKey(Buttons key);
-        void update();
+        void Draw();
+        void HandleKey(Buttons key);
+        void Update();
     }
 }

@@ -48,14 +48,14 @@ namespace InfCy
                             running = false;
                         }
 
-                        controls.update(key, topScreen.handleKey);
+                        controls.Update(key, topScreen.HandleKey);
                     }
 
                     
-                    topScreen.update(); // TODO: Timestamp
+                    topScreen.Update(); // TODO: Timestamp
 
                     root.clear();
-                    topScreen.draw();
+                    topScreen.Draw();
                     root.print(0, 0, ((int)(1 / (frameTime.TotalSeconds + .01))).ToString());
 
                     TCODConsole.flush();

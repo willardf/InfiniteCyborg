@@ -3,7 +3,7 @@ namespace InfCy.GameCore
 {
     interface IDrawable
     {
-        void draw(Camera root);
-        void drawInfo(Camera root, int y);
+        void Draw(Camera root);
+        void DrawInfo(Camera root, int y);
     }
 }

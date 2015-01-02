@@ -20,17 +20,17 @@ namespace InfCy.Ui
             Components = new List<FormComponent>();
         }
 
-        public void draw()
+        public void Draw()
         {
-            Components.ForEach(c => c.draw(root));
+            Components.ForEach(c => c.Draw(root));
         }
 
-        public void handleKey(Buttons key)
+        public void HandleKey(Buttons key)
         {
-            Components[focusIdx].handleKey(key);
+            Components[focusIdx].HandleKey(key);
         }
 
-        public void update()
+        public void Update()
         {
             // Nothing to do?
         }

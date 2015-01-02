@@ -51,7 +51,7 @@ namespace InfCy.GameCore
                 }
             }
 
-            Items.ForEach(i => i.draw(root));
+            Items.ForEach(i => i.Draw(root));
         }
 
         internal void setCell(int x, int y, Cell cell)
@@ -97,7 +97,7 @@ namespace InfCy.GameCore
             visMap.Dispose();
         }
 
-        public void updateFov(int x, int y)
+        public void UpdateFov(int x, int y)
         {
             visMap.computeFov(x, y);
         }

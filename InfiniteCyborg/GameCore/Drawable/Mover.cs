@@ -52,9 +52,7 @@ namespace InfCy.GameCore
 
         protected abstract void OnMove();
 
-        public virtual void OnDeath(Mover killer)
-        {
-        }
+        public abstract void OnDeath(Mover killer);
 
         public void TakeDamage(int dmg, Mover attacker)
         {
@@ -86,8 +84,8 @@ namespace InfCy.GameCore
 
         public IntVector Position { get { return new IntVector(X, Y); } }
 
-        public abstract void draw(Camera root);
+        public abstract void Draw(Camera root);
 
-        public abstract void drawInfo(Camera root, int y);
+        public abstract void DrawInfo(Camera root, int y);
     }
 }

@@ -34,7 +34,7 @@ namespace InfCy.GameCore
         public readonly static int BitCount = ComponentBits.End;
 
         public Weapon()
-            : this("First", new BitField(BitCount))
+            : this("Fist", new BitField(BitCount))
         {
             Name = "Fist";
             Melee = true;
@@ -123,12 +123,12 @@ namespace InfCy.GameCore
 
         public static readonly Weapon Fists = new Weapon();
 
-        public override void draw(Camera root)
+        public override void Draw(Camera root)
         {
             root.setChar(X, Y, '2');
         }
 
-        public override void drawInfo(Camera root, int y)
+        public override void DrawInfo(Camera root, int y)
         {
             
         }

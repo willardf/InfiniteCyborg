@@ -12,8 +12,8 @@ namespace InfCy.Ui
         public int X { get; set; }
         public int Y { get; set; }
 
-        public abstract void draw(TCODConsole root);
+        public abstract void Draw(TCODConsole root);
 
-        public abstract void handleKey(Buttons button);
+        public abstract void HandleKey(Buttons button);
     }
 }

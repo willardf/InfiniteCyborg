@@ -28,7 +28,6 @@ namespace InfCy.GameCore
         protected readonly static BitSet ComponentTypeBits = new BitSet(WeightBits.End, 4); // Up to 16 types
         public readonly static int BitCount = ComponentTypeBits.End;
 
-
         public Component()
         {
             data = new BitField(BitCount);
@@ -55,12 +54,12 @@ namespace InfCy.GameCore
         public ComponentTypes ComponentType { get { return (ComponentTypes)data[ComponentTypeBits]; } set { data[ComponentTypeBits] = (long)value; } }
         public override int Weight { get { return (int)data[WeightBits]; } set { data[WeightBits] = value; } }
 
-        public override void draw(Camera root)
+        public override void Draw(Camera root)
         {
             root.setChar(X, Y, '3');
         }
 
-        public override void drawInfo(Camera root, int y)
+        public override void DrawInfo(Camera root, int y)
         {
             
         }

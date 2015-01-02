@@ -56,7 +56,7 @@ namespace InfCy.GameCore
             light.R = 10;
         }
 
-        public void handleKey(Buttons key)
+        public void HandleKey(Buttons key)
         {
             switch (key)
             {
@@ -81,7 +81,7 @@ namespace InfCy.GameCore
                     }
                     break;
                 default:
-                    if (player.handleKey(key))
+                    if (player.HandleKey(key))
                     {
                         enemies.ForEach(e => e.takeTurn());
                     }
@@ -90,7 +90,7 @@ namespace InfCy.GameCore
         }
 
         IntVector mos;
-        public void update()
+        public void Update()
         {
             var status = TCODMouse.getStatus();
             mos.Set(status.CellX, status.CellY);
@@ -102,27 +102,27 @@ namespace InfCy.GameCore
             gameCam.update();
         }
 
-        public void draw()
+        public void Draw()
         {
             gameCam.draw();
             CurrentMap.draw(gameCam);
-            player.draw(gameCam);
-            enemies.ForEach(e => e.draw(gameCam));
+            player.Draw(gameCam);
+            enemies.ForEach(e => e.Draw(gameCam));
 
             playerCam.draw();
-            player.drawInfo(playerCam, 1);
+            player.DrawInfo(playerCam, 1);
 
             groundCam.draw();
             var sorty = enemies.OrderBy(e => IntVector.Distance(player.X, player.Y, e.X, e.Y)).ToList();
             for (int i = 0; i < sorty.Count; ++i)
             {
-                sorty[i].drawInfo(groundCam, i * 2 + 1);
+                sorty[i].DrawInfo(groundCam, i * 2 + 1);
             }
 
             light.draw(gameCam);
 
             logCam.draw();
-            Logger.drawLog(logCam);
+            Logger.DrawLog(logCam);
 
             // DEBUG
             root.setForegroundColor(TCODColor.white);
@@ -131,7 +131,7 @@ namespace InfCy.GameCore
             root.print(0, 1, string.Format("x:{0}\ty:{1}", mos.X, mos.Y));
         }
 
-        internal Mover[] findEnemies(Mover attacker, Weapon weapon, int destx, int desty)
+        internal Mover[] FindEnemies(Mover attacker, Weapon weapon, int destx, int desty)
         {
             var candidates = from e in movers
                              where e.Demeanor != attacker.Demeanor

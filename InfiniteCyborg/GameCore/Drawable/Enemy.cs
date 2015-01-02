@@ -21,7 +21,7 @@ namespace InfCy.GameCore
             var randy = TCODRandom.getInstance();
             var dx = randy.getInt(-1, 1);
             var dy = randy.getInt(-1, 1);
-            var enemies = Game.CurrentGame.findEnemies(this, weapon, X + dx, Y + dy);
+            var enemies = Game.CurrentGame.FindEnemies(this, weapon, X + dx, Y + dy);
             if (enemies.Length > 0)
             {
                 Battle.ResolveAttack(this, this.weapon, enemies[0]);
@@ -32,12 +32,12 @@ namespace InfCy.GameCore
             }
         }
 
-        public override void draw(Camera root)
+        public override void Draw(Camera root)
         {
             root.setChar(X, Y, Name[0]);
         }
 
-        public override void drawInfo(Camera root, int y)
+        public override void DrawInfo(Camera root, int y)
         {
             root.print(1, y, "{0}: {1}/{2}", Name, Health, MaxHealth);
         }

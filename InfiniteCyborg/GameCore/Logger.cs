@@ -14,7 +14,7 @@ namespace InfCy.GameCore
             history.Add(string.Format(format, args));
         }
 
-        public static void drawLog(Camera root, int last = 5)
+        public static void DrawLog(Camera root, int last = 5)
         {
             int y = 1;
             for (int i = Math.Max(0, history.Count - last); i < history.Count; ++i)

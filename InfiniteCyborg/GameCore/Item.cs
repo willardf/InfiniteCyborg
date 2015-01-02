@@ -15,8 +15,8 @@ namespace InfCy.GameCore
 
         public abstract int Weight { get; set; }
 
-        public abstract void draw(Camera root);
+        public abstract void Draw(Camera root);
 
-        public abstract void drawInfo(Camera root, int y);
+        public abstract void DrawInfo(Camera root, int y);
     }
 }
