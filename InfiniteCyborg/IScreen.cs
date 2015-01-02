@@ -1,5 +1,6 @@
-﻿using System;
-namespace InfCy.GameCore
+﻿using InfCy.GameCore;
+using System;
+namespace InfCy
 {
     interface IScreen : IDisposable
     {

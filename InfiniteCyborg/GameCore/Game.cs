@@ -17,7 +17,7 @@ namespace InfCy.GameCore
 
         internal static Game CurrentGame { get; private set; }
         internal static Map CurrentMap { get; private set; }
-        Player p;
+        Player player;
         Camera gameCam, playerCam, groundCam, logCam;
         TCODConsole root;
         ConeLight light;
@@ -27,10 +27,10 @@ namespace InfCy.GameCore
             CurrentGame = this;
 
             this.root = root;
-            gameCam = new Camera(root, 50, 50) { X = 4, Y = 4, Border = true };
+            gameCam = new Camera(root, 50, 50) { X = 2, Y = 2, Border = true };
             playerCam = new Camera(root, 40, 10) { X = gameCam.Right + 2, Y = 2, Border = true };
             groundCam = new Camera(root, 40, 30) { X = gameCam.Right + 2, Y = playerCam.Bottom + 2, Border = true };
-            logCam = new Camera(root, 40, 20) { X = 4, Y = gameCam.Bottom + 2, Border = true };
+            logCam = new Camera(root, 40, 20) { X = 2, Y = gameCam.Bottom + 2, Border = true };
 
             Map.LightsOn = true;
             CurrentMap = new Map(120, 120);
@@ -40,16 +40,17 @@ namespace InfCy.GameCore
             CurrentMap.setCell(12, 13, new Cell());
             CurrentMap.setCell(13, 13, new Cell());
             CurrentMap.setCell(14, 14, new Cell());
+            CurrentMap.Items.Add(new Component() { Name = "test", X = 15, Y = 16 });
 
             var en = new Enemy();
             en.SetPosition(20, 20);
             enemies.Add(en);
             movers.Add(en);
 
-            p = new Player();
-            p.SetPosition(10, 10);
-            gameCam.FollowPlayer(p);
-            movers.Add(p);
+            player = new Player();
+            player.SetPosition(10, 10);
+            gameCam.FollowPlayer(player);
+            movers.Add(player);
 
             light = new ConeLight();
             light.R = 10;
@@ -57,10 +58,34 @@ namespace InfCy.GameCore
 
         public void handleKey(Buttons key)
         {
-            if (key == Buttons.Lights) Map.LightsOn = !Map.LightsOn;
-            if (p.handleKey(key))
+            switch (key)
             {
-                enemies.ForEach(e => e.takeTurn());
+                case Buttons.Lights:
+                    Map.LightsOn = !Map.LightsOn;
+                    break;
+                case Buttons.Pickup:
+                    var groundItems = CurrentMap.FindItems(player.X, player.Y);
+                    if (groundItems.Count > 0)
+                    {
+                        if (groundItems.Count == 1)
+                        {
+                            var item = groundItems.First();
+                            player.Items.Add(item);
+                            CurrentMap.Items.Remove(item);
+                            Logger.Log("Picked up {0}", item.Name);
+                        }
+                        else
+                        {
+                            // Open menu for Count > 1
+                        }
+                    }
+                    break;
+                default:
+                    if (player.handleKey(key))
+                    {
+                        enemies.ForEach(e => e.takeTurn());
+                    }
+                    break;
             }
         }
 
@@ -69,10 +94,10 @@ namespace InfCy.GameCore
         {
             var status = TCODMouse.getStatus();
             mos.Set(status.CellX, status.CellY);
-            light.X = p.X;
-            light.Y = p.Y;
+            light.X = player.X;
+            light.Y = player.Y;
             light.setColor(1, 0, .5f);
-            light.Direction = gameCam.localCoords(mos).Sub(p.X, p.Y);
+            light.Direction = gameCam.localCoords(mos).Sub(player.X, player.Y);
 
             gameCam.update();
         }
@@ -81,14 +106,14 @@ namespace InfCy.GameCore
         {
             gameCam.draw();
             CurrentMap.draw(gameCam);
-            p.draw(gameCam);
+            player.draw(gameCam);
             enemies.ForEach(e => e.draw(gameCam));
 
             playerCam.draw();
-            p.drawInfo(playerCam);
+            player.drawInfo(playerCam, 1);
 
             groundCam.draw();
-            var sorty = enemies.OrderBy(e => IntVector.Distance(p.X, p.Y, e.X, e.Y)).ToList();
+            var sorty = enemies.OrderBy(e => IntVector.Distance(player.X, player.Y, e.X, e.Y)).ToList();
             for (int i = 0; i < sorty.Count; ++i)
             {
                 sorty[i].drawInfo(groundCam, i * 2 + 1);

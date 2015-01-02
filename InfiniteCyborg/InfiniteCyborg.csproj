@@ -48,20 +48,22 @@
     <Compile Include="GameCore\Battle.cs" />
     <Compile Include="GameCore\Camera.cs" />
     <Compile Include="GameCore\Cell.cs" />
-    <Compile Include="GameCore\Component.cs" />
+    <Compile Include="GameCore\Drawable\Component.cs" />
     <Compile Include="GameCore\Controls.cs" />
-    <Compile Include="GameCore\Enemy.cs" />
+    <Compile Include="GameCore\Drawable\Enemy.cs" />
     <Compile Include="GameCore\Game.cs" />
-    <Compile Include="GameCore\IScreen.cs" />
+    <Compile Include="GameCore\Drawable\IDrawable.cs" />
+    <Compile Include="IScreen.cs" />
+    <Compile Include="GameCore\Item.cs" />
     <Compile Include="GameCore\Logger.cs" />
     <Compile Include="GameCore\Map.cs" />
-    <Compile Include="GameCore\Mover.cs" />
+    <Compile Include="GameCore\Drawable\Mover.cs" />
     <Compile Include="Genetics\Bit.cs" />
     <Compile Include="Genetics\Optimizer.cs" />
     <Compile Include="Lights\ConeLight.cs" />
     <Compile Include="Lights\FOVSolver.cs" />
     <Compile Include="Lights\Light.cs" />
-    <Compile Include="GameCore\Player.cs" />
+    <Compile Include="GameCore\Drawable\Player.cs" />
     <Compile Include="GameCore\Room.cs" />
     <Compile Include="GameCore\Weapon.cs" />
     <Compile Include="Genetics\BitField.cs" />
@@ -70,6 +72,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Maths\IntVector.cs" />
+    <Compile Include="Ui\Form.cs" />
+    <Compile Include="Ui\FormComponent.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

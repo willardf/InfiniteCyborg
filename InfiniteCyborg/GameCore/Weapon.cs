@@ -10,7 +10,7 @@ namespace InfCy.GameCore
 {
     public enum Elements { None = 0, Electric, Fire, Water, Air }
 
-    class Weapon
+    class Weapon : Item
     {
         BitField data;
 
@@ -99,7 +99,6 @@ namespace InfCy.GameCore
             return (int)(factors / NumFactors * MaxLevel);
         }
 
-        public string Name { get; set; }
         public int BaseDamage { get { return (int)(data[DamageBits]); } set { data[DamageBits] = value; } }
         public int TotalDamage { get { return (int)(BaseDamage * EleMod(Element)) + SetComponents.Sum(c => c.TotalDamage); } }
         public Elements Element { get { return (Elements)data[ElementBits]; } set { data[ElementBits] = (long)value; } }
@@ -113,8 +112,8 @@ namespace InfCy.GameCore
         public byte Ammo { get { return (byte)data[AmmoBits]; } set { data[AmmoBits] = value; } }
         public byte AmmoLeft { get { return (byte)data[AmmoLeftBits]; } set { data[AmmoLeftBits] = value; } }
         public int Speed { get { return (int)data[SpeedBits]; } set { data[SpeedBits] = value; } }
-        public byte Weight { get { return (byte)data[WeightBits]; } set { data[WeightBits] = value; } }
-        public int TotalWeight { get { return Weight + SetComponents.Sum(c => c.Weight); } }
+        public byte MyWeight { get { return (byte)data[WeightBits]; } set { data[WeightBits] = value; } }
+        public override int Weight { get { return MyWeight + SetComponents.Sum(c => c.Weight); } set { throw new NotImplementedException(); } }
         public byte MaxComponents { get { return (byte)data[ComponentBits]; } set { data[ComponentBits] = value; } }
 
         public override string ToString()
@@ -123,5 +122,15 @@ namespace InfCy.GameCore
         }
 
         public static readonly Weapon Fists = new Weapon();
+
+        public override void draw(Camera root)
+        {
+            root.setChar(X, Y, '2');
+        }
+
+        public override void drawInfo(Camera root, int y)
+        {
+            
+        }
     }
 }

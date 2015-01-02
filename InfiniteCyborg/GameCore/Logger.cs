@@ -16,9 +16,10 @@ namespace InfCy.GameCore
 
         public static void drawLog(Camera root, int last = 5)
         {
-            for (int i = 0; i < last && i < history.Count; ++i)
+            int y = 1;
+            for (int i = Math.Max(0, history.Count - last); i < history.Count; ++i)
             {
-                root.print(1, i, history[i]);
+                root.print(1, y++, history[i]);
             }
         }
     }

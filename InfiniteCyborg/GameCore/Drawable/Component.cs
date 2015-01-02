@@ -8,7 +8,7 @@ namespace InfCy.GameCore
 {
     enum ComponentTypes { Mod, Ability }
 
-    class Component
+    class Component : Item
     {
         BitField data;
 
@@ -39,7 +39,6 @@ namespace InfCy.GameCore
             Speed = 0;
         }
 
-        public string Name { get; set; }
         public int BaseDamage { get { return (int)(data[DamageBits]); } set { data[DamageBits] = value; } }
         public int TotalDamage { get { return (int)(BaseDamage * Weapon.EleMod(Element)); } }
         public Elements Element { get { return (Elements)data[ElementBits]; } set { data[ElementBits] = (long)value; } }
@@ -54,6 +53,16 @@ namespace InfCy.GameCore
         public byte AmmoLeft { get { return (byte)data[AmmoLeftBits]; } set { data[AmmoLeftBits] = value; } }
         public int Speed { get { return (int)data[SpeedBits]; } set { data[SpeedBits] = value; } }
         public ComponentTypes ComponentType { get { return (ComponentTypes)data[ComponentTypeBits]; } set { data[ComponentTypeBits] = (long)value; } }
-        public byte Weight { get { return (byte)data[WeightBits]; } set { data[WeightBits] = value; } }
+        public override int Weight { get { return (int)data[WeightBits]; } set { data[WeightBits] = value; } }
+
+        public override void draw(Camera root)
+        {
+            root.setChar(X, Y, '3');
+        }
+
+        public override void drawInfo(Camera root, int y)
+        {
+            
+        }
     }
 }

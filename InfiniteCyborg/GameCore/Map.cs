@@ -16,6 +16,7 @@ namespace InfCy.GameCore
         public static bool LightsOn { get; set; }
 
         public List<Enemy> Enemies = new List<Enemy>();
+        public List<Item> Items = new List<Item>();
 
         public Map(int w, int h)
         {
@@ -32,23 +33,25 @@ namespace InfCy.GameCore
 
         public void draw(Camera root)
         {
-             for (int x = 0; x < Width; ++x)
-             {
-                 if (!root.isVisibleX(x)) continue;
-                 for (int y = 0; y < Height; ++y)
-                 {
-                     if (!root.isVisibleY(y)) continue;
+            for (int x = 0; x < Width; ++x)
+            {
+                if (!root.isVisibleX(x)) continue;
+                for (int y = 0; y < Height; ++y)
+                {
+                    if (!root.isVisibleY(y)) continue;
 
-                     Cell c = objMap[x][y];
-                     if (c != null)
-                     {
-                         if (LightsOn || visMap.isInFov(x, y))
-                         {
-                             root.setChar(x, y, c.DrawChar);
-                         }
-                     }
-                 }
-             }
+                    Cell c = objMap[x][y];
+                    if (c != null)
+                    {
+                        if (LightsOn || visMap.isInFov(x, y))
+                        {
+                            root.setChar(x, y, c.DrawChar);
+                        }
+                    }
+                }
+            }
+
+            Items.ForEach(i => i.draw(root));
         }
 
         internal void setCell(int x, int y, Cell cell)
@@ -94,9 +97,16 @@ namespace InfCy.GameCore
             visMap.Dispose();
         }
 
-        internal void updateFov(int x, int y)
+        public void updateFov(int x, int y)
         {
             visMap.computeFov(x, y);
+        }
+
+        public List<Item> FindItems(int x, int y)
+        {
+            return (from i in Items
+                   where i.X == x && i.Y == y
+                   select i).ToList();
         }
     }
 }

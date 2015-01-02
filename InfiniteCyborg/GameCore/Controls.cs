@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace InfCy.GameCore
 {
-    public enum Buttons { Up, Left, Right, Down, UpLeft, DownLeft, UpRight, DownRight, Lights }
+    public enum Buttons { Up, Left, Right, Down, UpLeft, DownLeft, UpRight, DownRight, Lights, Pickup }
     class Controls
     {
         readonly static Dictionary<TCODKeyCode, Buttons> ButtonMap = new Dictionary<TCODKeyCode, Buttons>()
@@ -21,7 +21,7 @@ namespace InfCy.GameCore
 
         readonly static Dictionary<char, Buttons> KeyMap = new Dictionary<char, Buttons>()
         {
-            
+            { 'p', Buttons.Pickup },
             { 'y', Buttons.UpLeft },
             { 'b', Buttons.DownLeft },
             { 'i', Buttons.UpRight },

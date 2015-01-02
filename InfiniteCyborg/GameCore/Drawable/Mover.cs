@@ -8,7 +8,7 @@ namespace InfCy.GameCore
 {
     public enum Hostile { Friendly, Enemy }
 
-    abstract class Mover
+    abstract class Mover : IDrawable
     {
         public Hostile Demeanor { get; set; }
 
@@ -85,5 +85,9 @@ namespace InfCy.GameCore
         }
 
         public IntVector Position { get { return new IntVector(X, Y); } }
+
+        public abstract void draw(Camera root);
+
+        public abstract void drawInfo(Camera root, int y);
     }
 }

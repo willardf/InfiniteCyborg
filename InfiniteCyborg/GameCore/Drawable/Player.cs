@@ -16,16 +16,20 @@ namespace InfCy.GameCore
         public byte Smithy { get; set; }
         #endregion
 
+        public List<Item> Items { get; set; }
         public List<Weapon> Hardpoints { get; set; }
 
         // TODO: Bodyparts which have weapon hardpoints
         // TODO: Bodytypes which have bodypart hardpoints
 
         public int Weight { get { return Hardpoints.Sum(h => h.Weight); } }
-        public int Speed { get { return Weight; } }
+
+        // TODO: This is definitely going to need some adjusting...
+        public float Speed { get { return Weight / 1024f; } } 
 
         public Player()
         {
+            Items = new List<Item>();
             var randy = TCODRandom.getInstance();
             Demeanor = Hostile.Friendly;
             Hardpoints = new List<Weapon>() { 
@@ -34,17 +38,17 @@ namespace InfCy.GameCore
             };
         }
 
-        public void draw(Camera root)
+        public override void draw(Camera root)
         {
             root.setChar(X, Y, '@');
         }
 
-        public void drawInfo(Camera info)
+        public override void drawInfo(Camera info, int y)
         {
-            info.print(1, 1, "Health {0}/{1}", Health, MaxHealth);
+            info.print(1, y, "Health {0}/{1}", Health, MaxHealth);
             for (int i = 0; i < Hardpoints.Count; ++i)
             {
-                info.print(1, 3 + i, "{0}", Hardpoints[i]);
+                info.print(1, y + i + 2, "{0}", Hardpoints[i]);
             }
         }
 

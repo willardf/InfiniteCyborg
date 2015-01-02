@@ -32,12 +32,12 @@ namespace InfCy.GameCore
             }
         }
 
-        public void draw(Camera root)
+        public override void draw(Camera root)
         {
             root.setChar(X, Y, Name[0]);
         }
 
-        public void drawInfo(Camera root, int y)
+        public override void drawInfo(Camera root, int y)
         {
             root.print(1, y, "{0}: {1}/{2}", Name, Health, MaxHealth);
         }
