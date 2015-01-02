@@ -110,7 +110,7 @@ namespace InfCy.GameCore
         {
             var candidates = from e in movers
                              where e.Demeanor != attacker.Demeanor
-                             where weapon.checkRange(destx, desty, e.X, e.Y)
+                             where weapon.CheckRange(destx, desty, e.X, e.Y)
                              where e != attacker
                              select e;
 

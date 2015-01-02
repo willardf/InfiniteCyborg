@@ -24,7 +24,7 @@ namespace InfCy.GameCore
             var enemies = Game.CurrentGame.findEnemies(this, weapon, X + dx, Y + dy);
             if (enemies.Length > 0)
             {
-                weapon.attack(this, enemies[0]);
+                Battle.ResolveAttack(this, this.weapon, enemies[0]);
             }
             else
             {
@@ -42,7 +42,7 @@ namespace InfCy.GameCore
             root.print(1, y, "{0}: {1}/{2}", Name, Health, MaxHealth);
         }
 
-        protected override void OnDeath(Mover killer)
+        public override void OnDeath(Mover killer)
         {
             base.OnDeath(killer);
             Game.CurrentGame.RemoveEnemy(this);

@@ -45,8 +45,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GameCore\Battle.cs" />
     <Compile Include="GameCore\Camera.cs" />
     <Compile Include="GameCore\Cell.cs" />
+    <Compile Include="GameCore\Component.cs" />
     <Compile Include="GameCore\Controls.cs" />
     <Compile Include="GameCore\Enemy.cs" />
     <Compile Include="GameCore\Game.cs" />

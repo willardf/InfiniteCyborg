@@ -13,7 +13,8 @@ namespace InfCy.GameCore
     class Weapon
     {
         BitField data;
-        public List<Component> SetComponents { get; set; }
+
+        private List<Component> SetComponents { get; set; }
 
         protected readonly static BitSet DamageBits = new BitSet(0, 6, true); // -32 - 31
         protected readonly static Bit MalfunctionBits = new Bit(DamageBits.End);
@@ -33,8 +34,8 @@ namespace InfCy.GameCore
         public readonly static int BitCount = ComponentBits.End;
 
         public Weapon()
+            : this("First", new BitField(BitCount))
         {
-            data = new BitField(BitCount);
             Name = "Fist";
             Melee = true;
             BaseDamage = 1;
@@ -44,6 +45,7 @@ namespace InfCy.GameCore
 
         public Weapon(string name, BitField d)
         {
+            SetComponents = new List<Component>();
             Name = name;
             data = d;
         }
@@ -66,6 +68,11 @@ namespace InfCy.GameCore
             }
 
             return false;
+        }
+
+        internal bool CheckRange(int srcX, int srcY, int destX, int destY)
+        {
+            return (IntVector.Distance(srcX, srcY, destX, destY) <= Range + .01);
         }
 
         public static float EleMod(Elements e)
@@ -94,8 +101,8 @@ namespace InfCy.GameCore
 
         public string Name { get; set; }
         public int BaseDamage { get { return (int)(data[DamageBits]); } set { data[DamageBits] = value; } }
-        public int TotalDamage { get { return (int)(BaseDamage * EleMod(MyElement)) + SetComponents.Sum(c => c.TotalDamage); } }
-        public Elements MyElement { get { return (Elements)data[ElementBits]; } set { data[ElementBits] = (long)value; } }
+        public int TotalDamage { get { return (int)(BaseDamage * EleMod(Element)) + SetComponents.Sum(c => c.TotalDamage); } }
+        public Elements Element { get { return (Elements)data[ElementBits]; } set { data[ElementBits] = (long)value; } }
         public bool Malfunctioning { get { return data[MalfunctionBits.Start]; } set { data[MalfunctionBits.Start] = value; } }
         public bool Melee { get { return data[MeleeBits.Start]; } set { data[MeleeBits.Start] = value; } }
         public int Push { get { return (int)data[PushBits]; } set { data[PushBits] = value; } }
@@ -116,22 +123,5 @@ namespace InfCy.GameCore
         }
 
         public static readonly Weapon Fists = new Weapon();
-
-        internal bool checkRange(int srcX, int srcY, int destX, int destY)
-        {
-            return (IntVector.Distance(srcX, srcY, destX, destY) <= Range + .01);
-        }
-
-        internal void attack(Mover attacker, Mover defender)
-        {
-            Logger.Log("{0} dealt {1} damage to {2}", attacker.Name, TotalDamage, defender.Name);
-            defender.TakeDamage(this.TotalDamage, attacker);
-            if (Push != 0)
-            {
-                var vec = (defender.Position - attacker.Position);
-                vec.Norm();
-                defender.Push(vec, Push, attacker);
-            }
-        }
     }
 }

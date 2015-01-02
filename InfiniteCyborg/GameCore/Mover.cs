@@ -52,18 +52,13 @@ namespace InfCy.GameCore
 
         protected abstract void OnMove();
 
-        protected virtual void OnDeath(Mover killer)
+        public virtual void OnDeath(Mover killer)
         {
-            Logger.Log("{0} killed {1}.", killer.Name, this.Name);
         }
 
         public void TakeDamage(int dmg, Mover attacker)
         {
             this.Health -= dmg;
-            if (this.Health <= 0)
-            {
-                OnDeath(attacker);
-            }
         }
 
         public void Push(IntVector dir, int amount, Mover cause)

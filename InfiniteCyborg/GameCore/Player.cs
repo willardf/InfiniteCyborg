@@ -9,15 +9,11 @@ namespace InfCy.GameCore
     class Player : Mover
     {
         #region Stats
-        public byte Pyro { get; set; } // Fire Components
-        public byte Elec { get; set; } // Elec Components
-        public byte Aero { get; set; } // Air Components
-        public byte Aqua { get; set; } // Water Components
-
-        // Advanced
-        public byte Smithy { get; set; } // WeaponMods
-        public byte Armory { get; set; } // ArmorMods
-        public byte Body { get; set; } // BodyMods
+        public byte Pyro { get; set; }
+        public byte Elec { get; set; }
+        public byte Aero { get; set; }
+        public byte Aqua { get; set; }
+        public byte Smithy { get; set; }
         #endregion
 
         public List<Weapon> Hardpoints { get; set; }
@@ -93,7 +89,7 @@ namespace InfCy.GameCore
             var enemies = Game.CurrentGame.findEnemies(this, Hardpoints.First(), X + dx, Y + dy);
             if (enemies.Length > 0)
             {
-                Hardpoints.First().attack(this, enemies[0]);
+                Battle.ResolveAttack(this, Hardpoints.First(), enemies[0]);
             }
             else
             {
