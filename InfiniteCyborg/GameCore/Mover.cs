@@ -12,8 +12,8 @@ namespace InfCy.GameCore
     {
         public Hostile Demeanor { get; set; }
 
-        public int Health = 10;
-        public int MaxHealth = 10;
+        public int Health { get; set; }
+        public int MaxHealth { get; set; }
 
         public int Steps { get; private set; }
         public string Name { get; set; }
@@ -25,6 +25,8 @@ namespace InfCy.GameCore
 
         public Mover()
         {
+            Health = MaxHealth = 10;
+
             id = MoverIds++;
             Name = "Mover " + id;
         }

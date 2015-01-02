@@ -9,23 +9,33 @@ namespace InfCy.GameCore
     class Player : Mover
     {
         #region Stats
-        public byte Pyro { get; set; }
-        public byte Elec { get; set; }
-        public byte Aero { get; set; }
-        public byte Aqua { get; set; }
-        public byte Smithy { get; set; }
+        public byte Pyro { get; set; } // Fire Components
+        public byte Elec { get; set; } // Elec Components
+        public byte Aero { get; set; } // Air Components
+        public byte Aqua { get; set; } // Water Components
+
+        // Advanced
+        public byte Smithy { get; set; } // WeaponMods
+        public byte Armory { get; set; } // ArmorMods
+        public byte Body { get; set; } // BodyMods
         #endregion
 
-        public Weapon MainWeapon { get; set; }
+        public List<Weapon> Hardpoints { get; set; }
 
         // TODO: Bodyparts which have weapon hardpoints
         // TODO: Bodytypes which have bodypart hardpoints
-        // TODO: Weight which affects move speed
+
+        public int Weight { get { return Hardpoints.Sum(h => h.Weight); } }
+        public int Speed { get { return Weight; } }
 
         public Player()
         {
+            var randy = TCODRandom.getInstance();
             Demeanor = Hostile.Friendly;
-            MainWeapon = Weapon.Fists;
+            Hardpoints = new List<Weapon>() { 
+                Weapon.Fists, 
+                new Weapon("Rando", new Genetics.BitField(Weapon.BitCount).Randomize(() => randy.getFloat(0, 1) > .5f))
+            };
         }
 
         public void draw(Camera root)
@@ -36,7 +46,10 @@ namespace InfCy.GameCore
         public void drawInfo(Camera info)
         {
             info.print(1, 1, "Health {0}/{1}", Health, MaxHealth);
-            info.print(1, 3, "{0}", MainWeapon);
+            for (int i = 0; i < Hardpoints.Count; ++i)
+            {
+                info.print(1, 3 + i, "{0}", Hardpoints[i]);
+            }
         }
 
         public bool handleKey(Buttons key)
@@ -77,11 +90,10 @@ namespace InfCy.GameCore
                     return false;
             }
 
-            var enemies = Game.CurrentGame.findEnemies(this, MainWeapon, X + dx, Y + dy);
+            var enemies = Game.CurrentGame.findEnemies(this, Hardpoints.First(), X + dx, Y + dy);
             if (enemies.Length > 0)
             {
-                MainWeapon.attack(this, enemies[0]);
-
+                Hardpoints.First().attack(this, enemies[0]);
             }
             else
             {
