@@ -8,7 +8,7 @@ namespace InfCy.GameCore
 {
     public enum Hostile { Friendly, Enemy }
 
-    abstract class Mover : IDrawable
+    public abstract class Mover : IDrawable
     {
         public Hostile Demeanor { get; set; }
 
@@ -33,7 +33,7 @@ namespace InfCy.GameCore
 
         public bool Move(int dx, int dy, bool updateStep = false)
         {
-            if (Game.CurrentGame.Walkable(X + dx, Y + dy))
+            if (GameScreen.CurrentGame.Walkable(X + dx, Y + dy))
             {
                 X += dx;
                 Y += dy;

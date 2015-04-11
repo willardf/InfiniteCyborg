@@ -9,20 +9,20 @@ using InfCy.Lights;
 
 namespace InfCy.GameCore
 {
-    public class Game : IScreen
+    public class GameScreen : IScreen
     {
         TCODRandom randy = TCODRandom.getInstance();
         List<Enemy> enemies = new List<Enemy>();
         List<Mover> movers = new List<Mover>();
 
-        internal static Game CurrentGame { get; private set; }
+        internal static GameScreen CurrentGame { get; private set; }
         internal static Map CurrentMap { get; private set; }
-        Player player;
+        public Player Player { get; private set; }
         Camera gameCam, playerCam, groundCam, logCam;
         TCODConsole root;
         ConeLight light;
 
-        public Game(TCODConsole root)
+        public GameScreen(TCODConsole root)
         {
             CurrentGame = this;
 
@@ -47,30 +47,30 @@ namespace InfCy.GameCore
             enemies.Add(en);
             movers.Add(en);
 
-            player = new Player();
-            player.SetPosition(10, 10);
-            gameCam.FollowPlayer(player);
-            movers.Add(player);
+            Player = new Player();
+            Player.SetPosition(10, 10);
+            gameCam.FollowPlayer(Player);
+            movers.Add(Player);
 
             light = new ConeLight();
             light.R = 10;
         }
 
-        public void HandleKey(Buttons key)
+        public void HandleKey(KeyEvent key)
         {
-            switch (key)
+            switch (key.button)
             {
                 case Buttons.Lights:
                     Map.LightsOn = !Map.LightsOn;
                     break;
                 case Buttons.Pickup:
-                    var groundItems = CurrentMap.FindItems(player.X, player.Y);
+                    var groundItems = CurrentMap.FindItems(Player.X, Player.Y);
                     if (groundItems.Count > 0)
                     {
                         if (groundItems.Count == 1)
                         {
                             var item = groundItems.First();
-                            player.Items.Add(item);
+                            Player.Items.Add(item);
                             CurrentMap.Items.Remove(item);
                             Logger.Log("Picked up {0}", item.Name);
                         }
@@ -81,7 +81,7 @@ namespace InfCy.GameCore
                     }
                     break;
                 default:
-                    if (player.HandleKey(key))
+                    if (Player.HandleKey(key))
                     {
                         enemies.ForEach(e => e.takeTurn());
                     }
@@ -94,10 +94,10 @@ namespace InfCy.GameCore
         {
             var status = TCODMouse.getStatus();
             mos.Set(status.CellX, status.CellY);
-            light.X = player.X;
-            light.Y = player.Y;
+            light.X = Player.X;
+            light.Y = Player.Y;
             light.setColor(1, 0, .5f);
-            light.Direction = gameCam.localCoords(mos).Sub(player.X, player.Y);
+            light.Direction = gameCam.localCoords(mos).Sub(Player.X, Player.Y);
 
             gameCam.update();
         }
@@ -106,14 +106,14 @@ namespace InfCy.GameCore
         {
             gameCam.draw();
             CurrentMap.draw(gameCam);
-            player.Draw(gameCam);
+            Player.Draw(gameCam);
             enemies.ForEach(e => e.Draw(gameCam));
 
             playerCam.draw();
-            player.DrawInfo(playerCam, 1);
+            Player.DrawInfo(playerCam, 1);
 
             groundCam.draw();
-            var sorty = enemies.OrderBy(e => IntVector.Distance(player.X, player.Y, e.X, e.Y)).ToList();
+            var sorty = enemies.OrderBy(e => IntVector.Distance(Player.X, Player.Y, e.X, e.Y)).ToList();
             for (int i = 0; i < sorty.Count; ++i)
             {
                 sorty[i].DrawInfo(groundCam, i * 2 + 1);

@@ -51,15 +51,19 @@
     <Compile Include="GameCore\Drawable\Component.cs" />
     <Compile Include="GameCore\Controls.cs" />
     <Compile Include="GameCore\Drawable\Enemy.cs" />
-    <Compile Include="GameCore\Game.cs" />
+    <Compile Include="GameCore\Elements.cs" />
+    <Compile Include="GameCore\Screens\GameScreen.cs" />
     <Compile Include="GameCore\Drawable\IDrawable.cs" />
-    <Compile Include="IScreen.cs" />
+    <Compile Include="GameCore\KeyEvent.cs" />
+    <Compile Include="GameCore\Screens\IScreen.cs" />
     <Compile Include="GameCore\Item.cs" />
     <Compile Include="GameCore\Logger.cs" />
     <Compile Include="GameCore\Map.cs" />
     <Compile Include="GameCore\Drawable\Mover.cs" />
+    <Compile Include="GameCore\Screens\NewGameScreen.cs" />
     <Compile Include="Genetics\Bit.cs" />
     <Compile Include="Genetics\Optimizer.cs" />
+    <Compile Include="Genetics\Tribit.cs" />
     <Compile Include="Lights\ConeLight.cs" />
     <Compile Include="Lights\FOVSolver.cs" />
     <Compile Include="Lights\Light.cs" />
@@ -74,6 +78,8 @@
     <Compile Include="Maths\IntVector.cs" />
     <Compile Include="Ui\Form.cs" />
     <Compile Include="Ui\FormComponent.cs" />
+    <Compile Include="Ui\Label.cs" />
+    <Compile Include="Ui\TextBox.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -99,6 +105,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

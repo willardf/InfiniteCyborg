@@ -10,9 +10,10 @@ namespace InfCy.Ui
 {
     public class Form : IScreen
     {
-        private int focusIdx = 0;
+        protected int focusIdx = 0;
+        protected TCODConsole root;
+
         public List<FormComponent> Components { get; private set; }
-        TCODConsole root;
 
         public Form(TCODConsole root)
         {
@@ -20,24 +21,24 @@ namespace InfCy.Ui
             Components = new List<FormComponent>();
         }
 
-        public void Draw()
+        public virtual void Draw()
         {
             Components.ForEach(c => c.Draw(root));
         }
 
-        public void HandleKey(Buttons key)
+        public virtual void HandleKey(KeyEvent key)
         {
             Components[focusIdx].HandleKey(key);
         }
 
-        public void Update()
+        public virtual void Update()
         {
             // Nothing to do?
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
-            // Nothing to do.
+            Components.ForEach(c => c.Dispose());
         }
     }
 }

@@ -8,17 +8,13 @@ using System.Threading.Tasks;
 
 namespace InfCy.GameCore
 {
-    public enum Elements { None = 0, Electric, Fire, Water, Air }
-
-    class Weapon : Item
+    public class Weapon : Item
     {
-        BitField data;
-
         private List<Component> SetComponents { get; set; }
 
         protected readonly static BitSet DamageBits = new BitSet(0, 6, true); // -32 - 31
         protected readonly static Bit MalfunctionBits = new Bit(DamageBits.End);
-        protected readonly static BitSet ElementBits = new BitSet(MalfunctionBits.End, 4); // Up to 16 types
+        protected readonly static BitSet ElementBits = new BitSet(MalfunctionBits.End, Elements.FieldSize);
         protected readonly static BitSet PushBits = new BitSet(ElementBits.End, 5, true); // -16 - 15
         protected readonly static Bit MeleeBits = new Bit(PushBits.End);
         protected readonly static BitSet RangeBits = new BitSet(MeleeBits.End, 5); // 0 - 31
@@ -77,9 +73,9 @@ namespace InfCy.GameCore
 
         public static float EleMod(Elements e)
         {
-            if (e == Elements.Air)
+            if (e.Air)
             {
-                return .5f; // Air converts 50% damage into push
+                return .5f; // Air and children converts 50% damage into push
             }
 
             return 1;
@@ -118,7 +114,7 @@ namespace InfCy.GameCore
 
         public override string ToString()
         {
-            return string.Format("{0} - {1} Dmg", this.Name, TotalDamage);
+            return string.Format("{0} - {1} Dmg ({2})", this.Name, this.TotalDamage, this.Element);
         }
 
         public static readonly Weapon Fists = new Weapon();

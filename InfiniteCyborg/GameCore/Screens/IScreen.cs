@@ -1,11 +1,11 @@
-﻿using InfCy.GameCore;
-using System;
-namespace InfCy
+﻿using System;
+
+namespace InfCy.GameCore
 {
     interface IScreen : IDisposable
     {
         void Draw();
-        void HandleKey(Buttons key);
+        void HandleKey(KeyEvent key);
         void Update();
     }
 }

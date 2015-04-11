@@ -93,6 +93,12 @@ namespace InfCy.Genetics
             set { this[b.Start, b.Length] = value - b.MinValue; }
         }
 
+        public TribitState this[Tribit b]
+        {
+            get { return (TribitState)this[b.Start, b.Length]; }
+            set { this[b.Start, b.Length] = (long)value; }
+        }
+
         public static BitField operator &(BitField a, BitField b)
         {
             BitField output = new BitField(Math.Max(a.Length, b.Length));

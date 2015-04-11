@@ -10,8 +10,6 @@ namespace InfCy.GameCore
 
     class Component : Item
     {
-        BitField data;
-
         protected readonly static BitSet DamageBits = new BitSet(0, 6, true); // -32 - 31
         protected readonly static Bit MalfunctionBits = new Bit(DamageBits.End);
         protected readonly static BitSet ElementBits = new BitSet(MalfunctionBits.End, 4); // Up to 16 types

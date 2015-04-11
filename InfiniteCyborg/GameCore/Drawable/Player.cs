@@ -6,7 +6,7 @@ using System.Text;
 
 namespace InfCy.GameCore
 {
-    class Player : Mover
+    public class Player : Mover
     {
         #region Stats
         public byte Pyro { get; set; }
@@ -29,6 +29,7 @@ namespace InfCy.GameCore
 
         public Player()
         {
+            this.Name = "Player";
             Items = new List<Item>();
             var randy = TCODRandom.getInstance();
             Demeanor = Hostile.Friendly;
@@ -52,11 +53,11 @@ namespace InfCy.GameCore
             }
         }
 
-        public bool HandleKey(Buttons key)
+        public bool HandleKey(KeyEvent key)
         {
             var dx = 0;
             var dy = 0;
-            switch (key)
+            switch (key.button)
             {
                 case Buttons.UpLeft:
                     dx = -1;
@@ -90,10 +91,13 @@ namespace InfCy.GameCore
                     return false;
             }
 
-            var enemies = Game.CurrentGame.FindEnemies(this, Hardpoints.First(), X + dx, Y + dy);
+            var enemies = GameScreen.CurrentGame.FindEnemies(this, Hardpoints.First(), X + dx, Y + dy);
             if (enemies.Length > 0)
             {
-                Battle.ResolveAttack(this, Hardpoints.First(), enemies[0]);
+                foreach (Weapon w in Hardpoints.Where(h => h.Melee))
+                {
+                    Battle.ResolveAttack(this, w, enemies[0]);
+                }
             }
             else
             {
@@ -105,11 +109,16 @@ namespace InfCy.GameCore
 
         protected override void OnMove()
         {
-            Game.CurrentMap.UpdateFov(this.X, this.Y);
+            GameScreen.CurrentMap.UpdateFov(this.X, this.Y);
         }
 
         public void Dispose()
         {
+        }
+
+        public override void OnDeath(Mover killer)
+        {
+            // You gone and died
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace InfCy.Maths
 {
-    struct IntVector
+    public struct IntVector
     {
         public int X { get; set; }
         public int Y { get; set; }

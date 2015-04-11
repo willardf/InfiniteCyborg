@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace InfCy.GameCore
 {
-    public enum Buttons { Up, Left, Right, Down, UpLeft, DownLeft, UpRight, DownRight, Lights, Pickup }
+    public enum Buttons { None, Up, Left, Right, Down, UpLeft, DownLeft, UpRight, DownRight, Lights, Pickup }
+
     class Controls
     {
         readonly static Dictionary<TCODKeyCode, Buttons> ButtonMap = new Dictionary<TCODKeyCode, Buttons>()
@@ -28,22 +29,18 @@ namespace InfCy.GameCore
             { ',', Buttons.DownRight }
         };
 
-        public void Update(TCODKey key, Action<Buttons> callback)
+        public void Update(TCODKey key, Action<KeyEvent> callback)
         {
-            Buttons b;
+            Buttons b = Buttons.None;
             if (key.KeyCode == TCODKeyCode.Char)
             {
-                if (KeyMap.TryGetValue(key.Character, out b))
-                {
-                    callback(b);
-                }
+                KeyMap.TryGetValue(key.Character, out b);
+                callback(new KeyEvent(key.Character, b));
             }
             else
             {
-                if (ButtonMap.TryGetValue(key.KeyCode, out b))
-                {
-                    callback(b);
-                }
+                ButtonMap.TryGetValue(key.KeyCode, out b);
+                callback(new KeyEvent(key.KeyCode, b));
             }
         }
     }

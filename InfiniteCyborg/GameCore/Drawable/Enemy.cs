@@ -21,7 +21,7 @@ namespace InfCy.GameCore
             var randy = TCODRandom.getInstance();
             var dx = randy.getInt(-1, 1);
             var dy = randy.getInt(-1, 1);
-            var enemies = Game.CurrentGame.FindEnemies(this, weapon, X + dx, Y + dy);
+            var enemies = GameScreen.CurrentGame.FindEnemies(this, weapon, X + dx, Y + dy);
             if (enemies.Length > 0)
             {
                 Battle.ResolveAttack(this, this.weapon, enemies[0]);
@@ -44,8 +44,7 @@ namespace InfCy.GameCore
 
         public override void OnDeath(Mover killer)
         {
-            base.OnDeath(killer);
-            Game.CurrentGame.RemoveEnemy(this);
+            GameScreen.CurrentGame.RemoveEnemy(this);
         }
 
         protected override void OnMove()

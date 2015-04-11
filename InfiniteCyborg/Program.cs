@@ -14,7 +14,7 @@ namespace InfCy
 
         TCODConsole root;
 
-        Stack<IScreen> Screens = new Stack<IScreen>();
+        private static Stack<IScreen> Screens = new Stack<IScreen>();
 
         public void run()
         {
@@ -24,45 +24,58 @@ namespace InfCy
             root = TCODConsole.root;
 
             DateTime date = new DateTime();
-            using (Game game = new Game(root))
+            Screens.Push(new NewGameScreen(root));
+            Controls controls = new Controls();
+
+            do
             {
-                Screens.Push(game);
-                Controls controls = new Controls();
+                var topScreen = Screens.Peek();
 
-                do
+                var frameTime = DateTime.Now - date;
+                var key = TCODConsole.checkForKeypress((int)TCODKeyStatus.KeyPressed);
+
+                if (key.KeyCode != TCODKeyCode.NoKey)
                 {
-                    var topScreen = Screens.Peek();
-
-                    var frameTime = DateTime.Now - date;
-                    var key = TCODConsole.checkForKeypress((int)TCODKeyStatus.KeyPressed);
-
-                    if (key.KeyCode != TCODKeyCode.NoKey)
+                    if (key.KeyCode == TCODKeyCode.Enter && (key.LeftAlt || key.RightAlt))
                     {
-                        if (key.KeyCode == TCODKeyCode.Enter && (key.LeftAlt || key.RightAlt))
-                        {
-                            // ALT-ENTER : switch fullscreen
-                            TCODConsole.setFullscreen(!TCODConsole.isFullscreen());
-                        }
-                        else if (key.KeyCode == TCODKeyCode.Escape)
-                        {
-                            running = false;
-                        }
-
-                        controls.Update(key, topScreen.HandleKey);
+                        // ALT-ENTER : switch fullscreen
+                        TCODConsole.setFullscreen(!TCODConsole.isFullscreen());
+                    }
+                    else if (key.KeyCode == TCODKeyCode.Escape)
+                    {
+                        running = false;
                     }
 
-                    
-                    topScreen.Update(); // TODO: Timestamp
-
-                    root.clear();
-                    topScreen.Draw();
-                    root.print(0, 0, ((int)(1 / (frameTime.TotalSeconds + .01))).ToString());
-
-                    TCODConsole.flush();
-                    date = DateTime.Now;
+                    controls.Update(key, topScreen.HandleKey);
                 }
-                while (!TCODConsole.isWindowClosed() && running);
+
+
+                topScreen.Update(); // TODO: Timestamp
+
+                root.clear();
+                topScreen.Draw(); // TODO: Draw all in reverse order for layering
+                root.print(0, 0, ((int)(1 / (frameTime.TotalSeconds + .01))).ToString());
+
+                TCODConsole.flush();
+                date = DateTime.Now;
             }
+            while (!TCODConsole.isWindowClosed() && running);
+        }
+
+        public static void PushScreen(IScreen s)
+        {
+            Screens.Push(s);
+        }
+
+        public static IScreen PopScreen(bool dispose)
+        {
+            var output = Screens.Pop();
+            if (dispose)
+            {
+                output.Dispose();
+            }
+
+            return output;
         }
 
         public void Dispose()

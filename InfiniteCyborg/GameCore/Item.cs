@@ -1,4 +1,5 @@
-﻿using System;
+﻿using InfCy.Genetics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace InfCy.GameCore
 {
-    abstract class Item : IDrawable
+    public abstract class Item : IDrawable
     {
+        protected BitField data = new BitField(1);
+
         public int X { get; set; }
         public int Y { get; set; }
 

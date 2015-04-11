@@ -30,7 +30,7 @@ namespace InfCy.Lights
 
         public override void draw(Camera root)
         {
-            solver.calculateFOV(Game.CurrentMap, X, Y, d => (1 - (d / R) * (d / R)) * B);
+            solver.calculateFOV(GameScreen.CurrentMap, X, Y, d => (1 - (d / R) * (d / R)) * B);
 
             for (int xx = X - R; xx < X + R; ++xx)
             {
