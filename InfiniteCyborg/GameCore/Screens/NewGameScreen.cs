@@ -22,7 +22,7 @@ namespace InfCy.GameCore
 
         public override void HandleKey(KeyEvent key)
         {
-            if (key.tcodKey == TCODKeyCode.Enter)
+            if (key.tcodKey == TCODKeyCode.Enter || key.tcodKey == TCODKeyCode.KeypadEnter)
             {
                 GameScreen newGame = new GameScreen(root);
                 newGame.Player.Name = this.nameText.Text;

@@ -50,7 +50,7 @@ namespace InfCy
                 }
 
 
-                topScreen.Update(); // TODO: Timestamp
+                topScreen.Update((float)frameTime.TotalSeconds);
 
                 root.clear();
                 topScreen.Draw(); // TODO: Draw all in reverse order for layering

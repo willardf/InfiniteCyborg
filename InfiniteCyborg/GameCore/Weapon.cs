@@ -39,7 +39,7 @@ namespace InfCy.GameCore
             Speed = 1;
         }
 
-        public Weapon(string name, BitField d)
+        public Weapon(string name, BitField d) : base(d)
         {
             SetComponents = new List<Component>();
             Name = name;

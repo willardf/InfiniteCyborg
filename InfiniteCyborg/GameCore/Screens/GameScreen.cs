@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using libtcod;
 using InfCy.Maths;
 using InfCy.Lights;
+using InfCy.Genetics;
 
 namespace InfCy.GameCore
 {
@@ -28,7 +29,7 @@ namespace InfCy.GameCore
 
             this.root = root;
             gameCam = new Camera(root, 50, 50) { X = 2, Y = 2, Border = true };
-            playerCam = new Camera(root, 40, 10) { X = gameCam.Right + 2, Y = 2, Border = true };
+            playerCam = new Camera(root, 40, 16) { X = gameCam.Right + 2, Y = 2, Border = true };
             groundCam = new Camera(root, 40, 30) { X = gameCam.Right + 2, Y = playerCam.Bottom + 2, Border = true };
             logCam = new Camera(root, 40, 20) { X = 2, Y = gameCam.Bottom + 2, Border = true };
 
@@ -40,7 +41,7 @@ namespace InfCy.GameCore
             CurrentMap.setCell(12, 13, new Cell());
             CurrentMap.setCell(13, 13, new Cell());
             CurrentMap.setCell(14, 14, new Cell());
-            CurrentMap.Items.Add(new Component() { Name = "test", X = 15, Y = 16 });
+            CurrentMap.Items.Add(new Component(new BitField(Component.BitCount).Randomize(() => TCODRandom.getInstance().getFloat(0, 1) > .5f)) { Name = "test", X = 15, Y = 16 });
 
             var en = new Enemy();
             en.SetPosition(20, 20);
@@ -70,7 +71,7 @@ namespace InfCy.GameCore
                         if (groundItems.Count == 1)
                         {
                             var item = groundItems.First();
-                            Player.Items.Add(item);
+                            Player.Inventory.Add(item);
                             CurrentMap.Items.Remove(item);
                             Logger.Log("Picked up {0}", item.Name);
                         }
@@ -79,6 +80,9 @@ namespace InfCy.GameCore
                             // Open menu for Count > 1
                         }
                     }
+                    break;
+                case Buttons.Inventory:
+                    Program.PushScreen(new InventoryScreen(this.root, this.Player));
                     break;
                 default:
                     if (Player.HandleKey(key))
@@ -90,7 +94,7 @@ namespace InfCy.GameCore
         }
 
         IntVector mos;
-        public void Update()
+        public void Update(float dt)
         {
             var status = TCODMouse.getStatus();
             mos.Set(status.CellX, status.CellY);
@@ -113,7 +117,7 @@ namespace InfCy.GameCore
             Player.DrawInfo(playerCam, 1);
 
             groundCam.draw();
-            var sorty = enemies.OrderBy(e => IntVector.Distance(Player.X, Player.Y, e.X, e.Y)).ToList();
+            var sorty = enemies.Cast<IDrawable>().Union(CurrentMap.Items).OrderBy(e => IntVector.Distance(Player.X, Player.Y, e.X, e.Y)).ToList();
             for (int i = 0; i < sorty.Count; ++i)
             {
                 sorty[i].DrawInfo(groundCam, i * 2 + 1);

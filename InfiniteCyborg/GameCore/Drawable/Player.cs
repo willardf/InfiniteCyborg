@@ -1,4 +1,5 @@
-﻿using libtcod;
+﻿using InfCy.Maths;
+using libtcod;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace InfCy.GameCore
         public byte Smithy { get; set; }
         #endregion
 
-        public List<Item> Items { get; set; }
+        public List<Item> Inventory { get; set; }
         public List<Weapon> Hardpoints { get; set; }
 
         // TODO: Bodyparts which have weapon hardpoints
@@ -30,7 +31,7 @@ namespace InfCy.GameCore
         public Player()
         {
             this.Name = "Player";
-            Items = new List<Item>();
+            Inventory = new List<Item>();
             var randy = TCODRandom.getInstance();
             Demeanor = Hostile.Friendly;
             Hardpoints = new List<Weapon>() { 
@@ -51,60 +52,32 @@ namespace InfCy.GameCore
             {
                 info.print(1, y + i + 2, "{0}", Hardpoints[i]);
             }
+
+            info.print(1, info.Bottom - 4, "Tab for inventory");
         }
 
         public bool HandleKey(KeyEvent key)
         {
-            var dx = 0;
-            var dy = 0;
-            switch (key.button)
+            IntVector dp;
+            if (Directions.Directions.TryGetValue(key.button, out dp))
             {
-                case Buttons.UpLeft:
-                    dx = -1;
-                    dy = -1;
-                    break;
-                case Buttons.DownLeft:
-                    dx = -1;
-                    dy = 1;
-                    break;
-                case Buttons.DownRight:
-                    dx = 1;
-                    dy = 1;
-                    break;
-                case Buttons.UpRight:
-                    dx = 1;
-                    dy = -1;
-                    break;
-                case Buttons.Up:
-                    dy = -1;
-                    break;
-                case Buttons.Down:
-                    dy = 1;
-                    break;
-                case Buttons.Left:
-                    dx = -1;
-                    break;
-                case Buttons.Right:
-                    dx = 1;
-                    break;
-                default:
-                    return false;
-            }
-
-            var enemies = GameScreen.CurrentGame.FindEnemies(this, Hardpoints.First(), X + dx, Y + dy);
-            if (enemies.Length > 0)
-            {
-                foreach (Weapon w in Hardpoints.Where(h => h.Melee))
+                var enemies = GameScreen.CurrentGame.FindEnemies(this, Hardpoints.First(), X + dp.X, Y + dp.Y);
+                if (enemies.Length > 0)
                 {
-                    Battle.ResolveAttack(this, w, enemies[0]);
+                    foreach (Weapon w in Hardpoints.Where(h => h.Melee && h.Usable()))
+                    {
+                        Battle.ResolveAttack(this, w, enemies[0]);
+                    }
                 }
-            }
-            else
-            {
-                Move(dx, dy);
+                else
+                {
+                    Move(dp.X, dp.Y);
+                }
+
+                return true;
             }
 
-            return true;
+            return false;
         }
 
         protected override void OnMove()

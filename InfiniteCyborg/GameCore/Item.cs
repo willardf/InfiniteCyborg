@@ -11,10 +11,15 @@ namespace InfCy.GameCore
     {
         protected BitField data = new BitField(1);
 
+        public Item(BitField data)
+        {
+            this.data = data;
+        }
+
         public int X { get; set; }
         public int Y { get; set; }
 
-        public string Name { get; set; }
+        public virtual string Name { get; set; }
 
         public abstract int Weight { get; set; }
 

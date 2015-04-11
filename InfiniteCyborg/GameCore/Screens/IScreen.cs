@@ -6,6 +6,6 @@ namespace InfCy.GameCore
     {
         void Draw();
         void HandleKey(KeyEvent key);
-        void Update();
+        void Update(float dt);
     }
 }

@@ -27,15 +27,19 @@ namespace InfCy.GameCore
         public readonly static int BitCount = ComponentTypeBits.End;
 
         public Component()
+            : base(new BitField(BitCount))
         {
-            data = new BitField(BitCount);
-            Name = "Null";
 
             BaseDamage = 0;
             Push = 0;
             Speed = 0;
         }
 
+        public Component(BitField d)
+            : base(d)
+        {
+        }
+        
         public int BaseDamage { get { return (int)(data[DamageBits]); } set { data[DamageBits] = value; } }
         public int TotalDamage { get { return (int)(BaseDamage * Weapon.EleMod(Element)); } }
         public Elements Element { get { return (Elements)data[ElementBits]; } set { data[ElementBits] = (long)value; } }
@@ -51,6 +55,13 @@ namespace InfCy.GameCore
         public int Speed { get { return (int)data[SpeedBits]; } set { data[SpeedBits] = value; } }
         public ComponentTypes ComponentType { get { return (ComponentTypes)data[ComponentTypeBits]; } set { data[ComponentTypeBits] = (long)value; } }
         public override int Weight { get { return (int)data[WeightBits]; } set { data[WeightBits] = value; } }
+        public override string Name
+        {
+            get
+            {
+                return string.Format("{0}{1}-Type Component", this.Element.ToShortString(), this.Melee ? "M" : "R");
+            }
+        }
 
         public override void Draw(Camera root)
         {
@@ -59,7 +70,12 @@ namespace InfCy.GameCore
 
         public override void DrawInfo(Camera root, int y)
         {
-            
+            root.print(1, y, "{0}", this);
+        }
+
+        public override string ToString()
+        {
+            return Name;
         }
     }
 }

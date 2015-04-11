@@ -85,7 +85,14 @@ namespace InfCy.GameCore
                 else props.Add("Electric");
             } if (this.Earth) props.Add("Earth");
 
+            if (props.Count == 0) return "Neutral";
+
             return string.Join("/", props);
+        }
+
+        internal string ToShortString()
+        {
+            return string.Join("", ToString().Where(c => Char.IsUpper(c)));
         }
     }
 }

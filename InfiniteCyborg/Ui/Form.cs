@@ -31,7 +31,7 @@ namespace InfCy.Ui
             Components[focusIdx].HandleKey(key);
         }
 
-        public virtual void Update()
+        public virtual void Update(float dt)
         {
             // Nothing to do?
         }

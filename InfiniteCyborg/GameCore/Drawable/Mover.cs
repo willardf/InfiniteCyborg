@@ -6,7 +6,7 @@ using System.Text;
 
 namespace InfCy.GameCore
 {
-    public enum Hostile { Friendly, Enemy }
+    public enum Hostile { None, Friendly, Enemy, Neutral }
 
     public abstract class Mover : IDrawable
     {
@@ -31,13 +31,14 @@ namespace InfCy.GameCore
             Name = "Mover " + id;
         }
 
-        public bool Move(int dx, int dy, bool updateStep = false)
+        public bool Move(int dx, int dy, bool updateStep = true)
         {
             if (GameScreen.CurrentGame.Walkable(X + dx, Y + dy))
             {
                 X += dx;
                 Y += dy;
                 if (updateStep) Steps++;
+                OnMove();
                 return true;
             }
 
@@ -64,7 +65,7 @@ namespace InfCy.GameCore
             int dmg = 0;
             for (int i = 0; i < amount;  ++i)
             {
-                if (!Move(dir.X, dir.Y))
+                if (!Move(dir.X, dir.Y, false))
                 {
                     dmg = amount - i;
                     break;

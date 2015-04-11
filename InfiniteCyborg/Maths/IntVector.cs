@@ -35,8 +35,18 @@ namespace InfCy.Maths
 
         public double Angle(IntVector input)
         {
-            var x = input.X - Y;
-            var y = input.Y - Y;
+            return Angle(input.X, input.Y);
+        }
+
+        public double Angle(int inX, int inY)
+        {
+            return Angle(X, Y, inX, inY);
+        }
+
+        public static double Angle(int x1, int y1, int x2, int y2)
+        {
+            var x = x2 - x1;
+            var y = y2 - y1;
 
             double output = Math.Atan2(y, x);
             return output * 180f / Math.PI; // Output Degrees
