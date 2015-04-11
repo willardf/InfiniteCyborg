@@ -59,7 +59,7 @@ namespace InfCy.GameCore
         public bool HandleKey(KeyEvent key)
         {
             IntVector dp;
-            if (Directions.Directions.TryGetValue(key.button, out dp))
+            if (Directions.Cardinal8.TryGetValue(key.button, out dp))
             {
                 var enemies = GameScreen.CurrentGame.FindEnemies(this, Hardpoints.First(), X + dp.X, Y + dp.Y);
                 if (enemies.Length > 0)

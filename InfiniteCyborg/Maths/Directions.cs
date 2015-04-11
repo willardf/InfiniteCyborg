@@ -9,7 +9,7 @@ namespace InfCy.Maths
 {
     public static class Directions
     {
-        public static readonly Dictionary<Buttons, IntVector> Directions = new Dictionary<Buttons, IntVector>(){
+        public static readonly Dictionary<Buttons, IntVector> Cardinal8 = new Dictionary<Buttons, IntVector>(){
             { Buttons.Up, new IntVector(0, -1) },
             { Buttons.UpLeft, new IntVector(-1, -1) },
             { Buttons.UpRight, new IntVector(1, -1) },

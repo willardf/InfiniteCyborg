@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Anim\ActionAnimation.cs" />
     <Compile Include="Anim\Animation.cs" />
     <Compile Include="Anim\AnimationManager.cs" />
     <Compile Include="GameCore\Battle.cs" />

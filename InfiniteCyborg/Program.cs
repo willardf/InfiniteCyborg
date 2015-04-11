@@ -38,7 +38,6 @@ namespace InfCy
                 {
                     if (key.KeyCode == TCODKeyCode.Enter && (key.LeftAlt || key.RightAlt))
                     {
-                        // ALT-ENTER : switch fullscreen
                         TCODConsole.setFullscreen(!TCODConsole.isFullscreen());
                     }
                     else if (key.KeyCode == TCODKeyCode.Escape)
@@ -49,11 +48,14 @@ namespace InfCy
                     controls.Update(key, topScreen.HandleKey);
                 }
 
-
                 topScreen.Update((float)frameTime.TotalSeconds);
 
                 root.clear();
-                topScreen.Draw(); // TODO: Draw all in reverse order for layering
+                foreach (var screen in Screens.Reverse())
+                {
+                    screen.Draw(); // TODO: Draw all in reverse order for layering
+                }
+
                 root.print(0, 0, ((int)(1 / (frameTime.TotalSeconds + .01))).ToString());
 
                 TCODConsole.flush();

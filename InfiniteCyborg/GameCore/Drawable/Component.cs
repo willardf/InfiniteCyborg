@@ -14,8 +14,7 @@ namespace InfCy.GameCore
         protected readonly static Bit MalfunctionBits = new Bit(DamageBits.End);
         protected readonly static BitSet ElementBits = new BitSet(MalfunctionBits.End, 4); // Up to 16 types
         protected readonly static BitSet PushBits = new BitSet(ElementBits.End, 5, true); // -16 - 15
-        protected readonly static Bit MeleeBits = new Bit(PushBits.End);
-        protected readonly static BitSet RangeBits = new BitSet(MeleeBits.End, 5); // 0 - 31
+        protected readonly static BitSet RangeBits = new BitSet(PushBits.End, 5); // 0 - 31
         protected readonly static BitSet CoolDownBits = new BitSet(RangeBits.End, 5); // 0 - 31
         protected readonly static BitSet CoolDownLeftBits = new BitSet(RangeBits.End, 5); // 0 - 31
         protected readonly static Bit NeedsAmmoBits = new Bit(CoolDownLeftBits.End);
@@ -44,8 +43,8 @@ namespace InfCy.GameCore
         public int TotalDamage { get { return (int)(BaseDamage * Weapon.EleMod(Element)); } }
         public Elements Element { get { return (Elements)data[ElementBits]; } set { data[ElementBits] = (long)value; } }
         public bool Malfunctioning { get { return data[MalfunctionBits.Start]; } set { data[MalfunctionBits.Start] = value; } }
-        public bool Melee { get { return data[MeleeBits.Start]; } set { data[MeleeBits.Start] = value; } }
         public int Push { get { return (int)data[PushBits]; } set { data[PushBits] = value; } }
+        public bool Melee { get { return Range == 0; } }
         public byte Range { get { return (byte)data[RangeBits]; } set { data[RangeBits] = value; } }
         public byte CoolDown { get { return (byte)data[CoolDownBits]; } set { data[CoolDownBits] = value; } }
         public byte CoolDownLeft { get { return (byte)data[CoolDownLeftBits]; } set { data[CoolDownLeftBits] = value; } }
@@ -60,6 +59,23 @@ namespace InfCy.GameCore
             get
             {
                 return string.Format("{0}{1}-Type Component", this.Element.ToShortString(), this.Melee ? "M" : "R");
+            }
+        }
+
+        public int Level
+        {
+            get
+            {
+                // One factor (0, 1) to a line makes counting easier
+                const int MaxLevel = 100;
+                const float NumFactors = 5;
+                float factors =
+                 Math.Abs(this.BaseDamage) * this.Speed / (float)-DamageBits.MinValue // We know that Damage is unsigned and -Min > Max
+                 + Math.Abs(this.Push) / (float)-PushBits.MinValue
+                 + (1 - this.CoolDown / (float)CoolDownBits.MaxValue)
+                 + this.Speed / (float)SpeedBits.MaxValue;
+
+                return (int)(factors / NumFactors * MaxLevel);
             }
         }
 

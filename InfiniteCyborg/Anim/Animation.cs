@@ -14,7 +14,7 @@ namespace InfCy.Anim
             this.duration = duration;
         }
 
-        public void Update(float dt)
+        public virtual void Update(float dt)
         {
             timer = Math.Min(duration, timer + dt);
         }
