@@ -7,6 +7,7 @@ using libtcod;
 using InfCy.Maths;
 using InfCy.Lights;
 using InfCy.Genetics;
+using InfCy.Anim;
 
 namespace InfCy.GameCore
 {
@@ -31,7 +32,7 @@ namespace InfCy.GameCore
             gameCam = new Camera(root, 50, 50) { X = 2, Y = 2, Border = true };
             playerCam = new Camera(root, 40, 16) { X = gameCam.Right + 2, Y = 2, Border = true };
             groundCam = new Camera(root, 40, 30) { X = gameCam.Right + 2, Y = playerCam.Bottom + 2, Border = true };
-            logCam = new Camera(root, 40, 20) { X = 2, Y = gameCam.Bottom + 2, Border = true };
+            logCam = new Camera(root, 50, 20) { X = 2, Y = gameCam.Bottom + 2, Border = true };
 
             Map.LightsOn = true;
             CurrentMap = new Map(120, 120);
@@ -59,6 +60,8 @@ namespace InfCy.GameCore
 
         public void HandleKey(KeyEvent key)
         {
+            if (AnimationManager.Instance.Animating) return;
+
             switch (key.button)
             {
                 case Buttons.Lights:
@@ -104,6 +107,7 @@ namespace InfCy.GameCore
             light.Direction = gameCam.localCoords(mos).Sub(Player.X, Player.Y);
 
             gameCam.update();
+            AnimationManager.Instance.Update(dt);
         }
 
         public void Draw()

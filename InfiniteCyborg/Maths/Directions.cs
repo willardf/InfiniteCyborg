@@ -16,8 +16,8 @@ namespace InfCy.Maths
             { Buttons.Down, new IntVector(0, 1) },
             { Buttons.DownLeft, new IntVector(-1, 1) },
             { Buttons.DownRight, new IntVector(1, 1) },
-            { Buttons.Left, new IntVector(-1, -1) },
-            { Buttons.Right, new IntVector(1, -1) }
+            { Buttons.Left, new IntVector(-1, 0) },
+            { Buttons.Right, new IntVector(1, 0) }
         };
     }
 }

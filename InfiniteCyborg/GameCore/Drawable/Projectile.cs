@@ -9,6 +9,7 @@ namespace InfCy.GameCore.Drawable
 {
     public class Projectile : Mover
     {
+        public int Damage { get; set; }
         public int Speed { get; set; }
         public int DestX { get; private set; }
         public int DestY { get; private set; }

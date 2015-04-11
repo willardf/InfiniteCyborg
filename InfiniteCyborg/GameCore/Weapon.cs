@@ -1,4 +1,5 @@
-﻿using InfCy.Genetics;
+﻿using InfCy.Anim;
+using InfCy.Genetics;
 using InfCy.Maths;
 using System;
 using System.Collections.Generic;
@@ -29,7 +30,7 @@ namespace InfCy.GameCore
             data = d;
         }
 
-        public void Use()
+        public Animation Use()
         {
             if (NeedsAmmo)
             {
@@ -37,11 +38,21 @@ namespace InfCy.GameCore
             }
 
             this.SetComponents.ForEach(c => c.CoolDownLeft = c.CoolDown);
+
+            if (this.Melee)
+            {
+                return new Animation(0);
+            }
+            else
+            {
+                // Create projectile and stuff
+                return new Animation(1);
+            }
         }
 
         public bool Usable()
         {
-            if (CoolDownLeft == 0 && AmmoLeft > 0)
+            if (CoolDownLeft == 0 && (!NeedsAmmo || AmmoLeft > 0))
             {
                 return true;
             }
@@ -70,11 +81,11 @@ namespace InfCy.GameCore
         public int TotalDamage { get { return (int)(BaseDamage * EleMod(Element)) + SetComponents.Sum(c => c.TotalDamage); } }
         public Elements Element { get { return new Elements(this.SetComponents.Aggregate<Component, BitField>(new BitField(Elements.FieldSize), (a, b) => a | b.Element)); } }
         public bool Malfunctioning { get { return this.SetComponents.Any(c => c.Malfunctioning); } }
-        public bool Melee { get { return Range == 0; } }
+        public bool Melee { get { return Range <= 1; } }
         public int Push { get { return this.SetComponents.Sum(c => c.Push); } }
-        public byte Range { get { return this.SetComponents.Max(c => c.Range); } }
-        public byte CoolDown { get { return this.SetComponents.Max(c => c.CoolDown); } }
-        public byte CoolDownLeft { get { return this.SetComponents.Max(c => c.CoolDownLeft); } }
+        public byte Range { get { return this.SetComponents.Count == 0 ? (byte)1 : this.SetComponents.Max(c => c.Range); } }
+        public byte CoolDown { get { return this.SetComponents.Count == 0 ? (byte)0 : this.SetComponents.Max(c => c.CoolDown); } }
+        public byte CoolDownLeft { get { return this.SetComponents.Count == 0 ? (byte)0 : this.SetComponents.Max(c => c.CoolDownLeft); } }
         public bool NeedsAmmo { get { return this.SetComponents.Any(c => c.NeedsAmmo); } }
         public int Ammo { get { return this.SetComponents.Sum(c => c.Ammo); } }
         public int AmmoLeft

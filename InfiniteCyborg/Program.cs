@@ -32,6 +32,8 @@ namespace InfCy
                 var topScreen = Screens.Peek();
 
                 var frameTime = DateTime.Now - date;
+                date = DateTime.Now;
+
                 var key = TCODConsole.checkForKeypress((int)TCODKeyStatus.KeyPressed);
 
                 if (key.KeyCode != TCODKeyCode.NoKey)
@@ -59,7 +61,6 @@ namespace InfCy
                 root.print(0, 0, ((int)(1 / (frameTime.TotalSeconds + .01))).ToString());
 
                 TCODConsole.flush();
-                date = DateTime.Now;
             }
             while (!TCODConsole.isWindowClosed() && running);
         }

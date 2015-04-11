@@ -7,18 +7,19 @@ namespace InfCy.Anim
 {
     public class Animation
     {
-        protected float duration = 0;
+        public float Duration { get; private set; }
+
         protected float timer = 0;
         public Animation(float duration)
         {
-            this.duration = duration;
+            this.Duration = duration;
         }
 
         public virtual void Update(float dt)
         {
-            timer = Math.Min(duration, timer + dt);
+            timer = Math.Min(Duration, timer + dt);
         }
 
-        public bool Finished { get { return timer >= duration; } }
+        public bool Finished { get { return timer >= Duration; } }
     }
 }
