@@ -52,6 +52,23 @@ namespace InfCy.Maths
             return output * 180f / Math.PI; // Output Degrees
         }
 
+        public float DistanceSquared(IntVector dest)
+        {
+            return DistanceSquared(this.X, this.Y, dest.X, dest.Y);
+        }
+
+        public static float DistanceSquared(int x1, int y1, int x2, int y2)
+        {
+            var dx = x1 - x2;
+            var dy = y1 - y2;
+            return dx * dx + dy * dy;
+        }
+
+        public float Distance(IntVector dest)
+        {
+            return Distance(this.X, this.Y, dest.X, dest.Y);
+        }
+
         public static float Distance(int x1, int y1, int x2, int y2)
         {
             var dx = x1 - x2;
@@ -63,6 +80,11 @@ namespace InfCy.Maths
         public static IntVector operator +(IntVector a, IntVector b) { return new IntVector(a.X + b.X, a.Y + b.Y); }
         public static IntVector operator *(IntVector a, int b) { return new IntVector(a.X * b, a.Y * b); }
 
+        internal IntVector Neg()
+        {
+            return new IntVector(-X, -Y);
+        }
+
         internal IntVector Sub(int x, int y)
         {
             return new IntVector(X - x, Y - y);
@@ -71,6 +93,23 @@ namespace InfCy.Maths
         internal IntVector Add(int x, int y)
         {
             return new IntVector(X + x, Y + y);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is IntVector)
+            {
+                var i = (IntVector)obj;
+                return i.X == this.X && i.Y == this.Y;
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            // Primes always reduce collisions, right?
+            return this.X * 13 + this.Y * 17;
         }
     }
 }

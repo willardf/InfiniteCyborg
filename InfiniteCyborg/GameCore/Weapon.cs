@@ -17,11 +17,7 @@ namespace InfCy.GameCore
 
         public readonly static int BitCount = ComponentBits.End;
 
-        public Weapon()
-            : this("Fist", new BitField(1))
-        {
-            Name = "Fist";
-        }
+        public Weapon() : this("Fist", new BitField(1)) { }
 
         public Weapon(string name, BitField d) : base(d)
         {
@@ -30,7 +26,7 @@ namespace InfCy.GameCore
             data = d;
         }
 
-        public Animation Use()
+        public IAnimation Use()
         {
             if (NeedsAmmo)
             {
@@ -41,12 +37,12 @@ namespace InfCy.GameCore
 
             if (this.Melee)
             {
-                return new Animation(0);
+                return new WaitAnimation(0);
             }
             else
             {
                 // Create projectile and stuff
-                return new Animation(1);
+                return new WaitAnimation(1);
             }
         }
 
@@ -81,7 +77,7 @@ namespace InfCy.GameCore
         public int TotalDamage { get { return (int)(BaseDamage * EleMod(Element)) + SetComponents.Sum(c => c.TotalDamage); } }
         public Elements Element { get { return new Elements(this.SetComponents.Aggregate<Component, BitField>(new BitField(Elements.FieldSize), (a, b) => a | b.Element)); } }
         public bool Malfunctioning { get { return this.SetComponents.Any(c => c.Malfunctioning); } }
-        public bool Melee { get { return Range <= 1; } }
+        public bool Melee { get { return this.SetComponents.All(c => c.Melee); } }
         public int Push { get { return this.SetComponents.Sum(c => c.Push); } }
         public byte Range { get { return this.SetComponents.Count == 0 ? (byte)1 : this.SetComponents.Max(c => c.Range); } }
         public byte CoolDown { get { return this.SetComponents.Count == 0 ? (byte)0 : this.SetComponents.Max(c => c.CoolDown); } }
@@ -108,7 +104,8 @@ namespace InfCy.GameCore
                 }
             }
         }
-        public int Speed { get { return this.SetComponents.Min(c => c.Speed) + 64; } }
+
+        public int Speed { get { return this.SetComponents.Count == 0 ? 25 : this.SetComponents.Min(c => c.Speed); } }
         public override int Weight { get { return 1 + SetComponents.Sum(c => c.Weight); } set { throw new NotImplementedException(); } }
         public byte MaxComponents { get { return (byte)data[ComponentBits]; } set { data[ComponentBits] = value; } }
 
@@ -127,6 +124,17 @@ namespace InfCy.GameCore
         public override void DrawInfo(Camera root, int y)
         {
             
+        }
+
+        public bool AddComponent(Component component)
+        {
+            if (this.SetComponents.Count < this.MaxComponents)
+            {
+                this.SetComponents.Add(component);
+                return false;
+            }
+
+            return true;
         }
     }
 }

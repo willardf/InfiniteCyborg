@@ -19,8 +19,8 @@ namespace InfCy.Lights
 
         public ConeLight()
         {
-            B = 1;
-            R = 5;
+            this.B = .5f;
+            this.R = 5;
         }
 
         public void update()

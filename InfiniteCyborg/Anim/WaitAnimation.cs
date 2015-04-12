@@ -5,21 +5,23 @@ using System.Text;
 
 namespace InfCy.Anim
 {
-    public class Animation
+    public class WaitAnimation : IAnimation
     {
-        public float Duration { get; private set; }
+        public virtual float Duration { get; protected set; }
 
         protected float timer = 0;
-        public Animation(float duration)
+        public WaitAnimation(float duration)
         {
             this.Duration = duration;
         }
+
+        protected WaitAnimation() { }
 
         public virtual void Update(float dt)
         {
             timer = Math.Min(Duration, timer + dt);
         }
 
-        public bool Finished { get { return timer >= Duration; } }
+        public virtual bool Finished { get { return timer >= Duration; } }
     }
 }

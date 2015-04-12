@@ -46,8 +46,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Anim\ActionAnimation.cs" />
-    <Compile Include="Anim\Animation.cs" />
+    <Compile Include="Anim\WaitAnimation.cs" />
     <Compile Include="Anim\AnimationManager.cs" />
+    <Compile Include="Anim\IAnimation.cs" />
     <Compile Include="GameCore\Battle.cs" />
     <Compile Include="GameCore\Camera.cs" />
     <Compile Include="GameCore\Cell.cs" />
@@ -56,6 +57,7 @@
     <Compile Include="GameCore\Drawable\Enemy.cs" />
     <Compile Include="GameCore\Drawable\Projectile.cs" />
     <Compile Include="GameCore\Elements.cs" />
+    <Compile Include="GameCore\MoveScheduler.cs" />
     <Compile Include="GameCore\Screens\GameScreen.cs" />
     <Compile Include="GameCore\Drawable\IDrawable.cs" />
     <Compile Include="GameCore\KeyEvent.cs" />
@@ -80,6 +82,7 @@
     <Compile Include="Genetics\BitFieldExtensions.cs" />
     <Compile Include="Genetics\BitSet.cs" />
     <Compile Include="Maths\Directions.cs" />
+    <Compile Include="Maths\Path.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Maths\IntVector.cs" />

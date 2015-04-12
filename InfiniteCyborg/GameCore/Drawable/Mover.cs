@@ -6,7 +6,7 @@ using System.Text;
 
 namespace InfCy.GameCore
 {
-    public enum Hostile { None, Friendly, Enemy, Neutral }
+    public enum Hostile { None, Friendly = 1 << 0, Enemy = 1 << 1, Neutral = 1 << 2 }
 
     public abstract class Mover : IDrawable
     {
@@ -20,6 +20,11 @@ namespace InfCy.GameCore
         public int X { get; private set; }
         public int Y { get; private set; }
 
+        public abstract int Speed { get; set; }
+
+        public int Timer { get; set; }
+        public int Duration { get; protected set; }
+
         private int id;
         private static int MoverIds = 1;
 
@@ -29,15 +34,32 @@ namespace InfCy.GameCore
 
             id = MoverIds++;
             Name = "Mover " + id;
+            this.Duration = 100;
         }
 
-        public bool Move(int dx, int dy, bool updateStep = true)
+        public bool Walk(IntVector input) { return Walk(input.X, input.Y); }
+        public bool Walk(int dx, int dy)
         {
             if (GameScreen.CurrentGame.Walkable(X + dx, Y + dy))
             {
                 X += dx;
                 Y += dy;
-                if (updateStep) Steps++;
+                Steps++;
+                OnMove();
+                this.Timer = 0;
+                this.Duration = 100 - Speed; // Based on speed
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool Push(int dx, int dy)
+        {
+            if (GameScreen.CurrentGame.Walkable(X + dx, Y + dy))
+            {
+                X += dx;
+                Y += dy;
                 OnMove();
                 return true;
             }
@@ -65,7 +87,7 @@ namespace InfCy.GameCore
             int dmg = 0;
             for (int i = 0; i < amount;  ++i)
             {
-                if (!Move(dir.X, dir.Y, false))
+                if (!Push(dir.X, dir.Y))
                 {
                     dmg = amount - i;
                     break;
@@ -88,5 +110,7 @@ namespace InfCy.GameCore
         public abstract void Draw(Camera root);
 
         public abstract void DrawInfo(Camera root, int y);
+
+        public abstract bool DoTurn();
     }
 }

@@ -6,23 +6,24 @@ using System.Threading.Tasks;
 
 namespace InfCy.Anim
 {
-    public class ActionAnimation : Animation
+    public class ActionAnimation : IAnimation
     {
         Action toRun;
 
         public ActionAnimation(Action toRun)
-            : base(1)
         {
             this.toRun = toRun;
         }
 
-        public override void Update(float dt)
+        public void Update(float dt)
         {
             if (!this.Finished)
             {
+                this.Finished = true;
                 this.toRun();
-                base.Update(5);
             }
         }
+
+        public bool Finished { get; private set; }
     }
 }

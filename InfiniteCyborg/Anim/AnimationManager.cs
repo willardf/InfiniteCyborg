@@ -7,9 +7,12 @@ using InfCy.Anim;
 
 namespace InfCy.Anim
 {
+    /// <summary>
+    /// Handles real time animations. Stuff that happens independant of turns.
+    /// </summary>
     public class AnimationManager
     {
-        private Queue<Animation> Anims = new Queue<Animation>();
+        private Queue<IAnimation> Anims = new Queue<IAnimation>();
         public bool Animating { get { return Anims.Count > 0; } }
 
         #region Singleton junk
@@ -22,7 +25,7 @@ namespace InfCy.Anim
         {
             if (Anims.Count > 0)
             {
-                Animation a = Anims.Peek();
+                IAnimation a = Anims.Peek();
                 a.Update(dt);
                 if (a.Finished)
                 {
@@ -31,7 +34,7 @@ namespace InfCy.Anim
             }
         }
 
-        internal void Enqueue(Animation item)
+        internal void Enqueue(IAnimation item)
         {
             Anims.Enqueue(item);
         }

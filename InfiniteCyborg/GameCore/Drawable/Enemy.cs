@@ -1,4 +1,5 @@
-﻿using libtcod;
+﻿using InfCy.Maths;
+using libtcod;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace InfCy.GameCore
 {
-    class Enemy : Mover
+    public class Enemy : Mover
     {
         public Weapon weapon = Weapon.Fists;
 
@@ -16,20 +17,17 @@ namespace InfCy.GameCore
             Demeanor = Hostile.Enemy;
         }
 
-        public void takeTurn()
+        public override bool DoTurn()
         {
             var randy = TCODRandom.getInstance();
             var dx = randy.getInt(-1, 1);
             var dy = randy.getInt(-1, 1);
-            var enemies = GameScreen.CurrentGame.FindEnemies(this, weapon, X + dx, Y + dy);
-            if (enemies.Length > 0)
+            if (!Battle.ResolveAttack(this, this.weapon, new IntVector(X + dx, Y + dy), GameScreen.CurrentGame))
             {
-                Battle.ResolveAttack(this, this.weapon, enemies[0]);
+                Walk(dx, dy);
             }
-            else
-            {
-                Move(dx, dy);
-            }
+
+            return true;
         }
 
         public override void Draw(Camera root)
@@ -44,12 +42,18 @@ namespace InfCy.GameCore
 
         public override void OnDeath(Mover killer)
         {
-            GameScreen.CurrentGame.RemoveEnemy(this);
+            GameScreen.CurrentGame.RemoveMover(this);
         }
 
         protected override void OnMove()
         {
             
+        }
+
+        public override int Speed
+        {
+            get { return 1; }
+            set { }
         }
     }
 }

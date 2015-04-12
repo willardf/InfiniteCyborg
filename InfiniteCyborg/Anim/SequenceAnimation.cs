@@ -5,12 +5,11 @@ using System.Text;
 
 namespace InfCy.Anim
 {
-    public class SequenceAnimation : Animation
+    public class SequenceAnimation : IAnimation
     {
-        private Queue<Animation> Anims = new Queue<Animation>();
-        public SequenceAnimation() : base(0) { }
-        public SequenceAnimation(params Animation[] anims)
-            : base(anims.Sum(a=>a.Duration))
+        private Queue<IAnimation> Anims = new Queue<IAnimation>();
+        public SequenceAnimation() { }
+        public SequenceAnimation(params IAnimation[] anims)
         {
             foreach (var a in anims)
             {
@@ -18,19 +17,19 @@ namespace InfCy.Anim
             }
         }
 
-        public override void Update(float dt)
+        public void Update(float dt)
         {
             if (Anims.Count > 0)
             {
-                Animation a = Anims.Peek();
+                IAnimation a = this.Anims.Peek();
                 a.Update(dt);
                 if (a.Finished)
                 {
                     Anims.Dequeue();
                 }
             }
-
-            base.Update(dt);
         }
+
+        public bool Finished { get { return this.Anims.Count == 0; } }
     }
 }

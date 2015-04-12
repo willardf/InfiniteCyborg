@@ -10,12 +10,24 @@ namespace InfCy.GameCore.Drawable
     public class Projectile : Mover
     {
         public int Damage { get; set; }
-        public int Speed { get; set; }
+        public override int Speed { get; set; }
+
         public int DestX { get; private set; }
         public int DestY { get; private set; }
 
         public Projectile()
         {
+        }
+
+        public override bool DoTurn()
+        {
+            if (!Walk(this.Position.Sub(DestX, DestY).Neg()))
+            {
+                // Explode or whatever
+                GameScreen.CurrentGame.RemoveMover(this);
+            }
+
+            return true;
         }
 
         protected override void OnMove()

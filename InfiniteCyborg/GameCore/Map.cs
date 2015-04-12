@@ -6,7 +6,7 @@ using libtcod;
 
 namespace InfCy.GameCore
 {
-    class Map : IDisposable
+    public class Map : IDisposable
     {
         TCODMap visMap;
         Cell[][] objMap;
