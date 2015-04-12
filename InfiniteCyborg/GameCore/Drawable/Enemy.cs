@@ -17,7 +17,7 @@ namespace InfCy.GameCore
             Demeanor = Hostile.Enemy;
         }
 
-        public override bool DoTurn()
+        public override void DoTurn()
         {
             var randy = TCODRandom.getInstance();
             var dx = randy.getInt(-1, 1);
@@ -26,8 +26,6 @@ namespace InfCy.GameCore
             {
                 Walk(dx, dy);
             }
-
-            return true;
         }
 
         public override void Draw(Camera root)

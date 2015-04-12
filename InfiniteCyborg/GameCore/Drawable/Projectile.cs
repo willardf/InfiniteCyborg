@@ -19,15 +19,13 @@ namespace InfCy.GameCore.Drawable
         {
         }
 
-        public override bool DoTurn()
+        public override void DoTurn()
         {
             if (!Walk(this.Position.Sub(DestX, DestY).Neg()))
             {
                 // Explode or whatever
                 GameScreen.CurrentGame.RemoveMover(this);
             }
-
-            return true;
         }
 
         protected override void OnMove()

@@ -111,6 +111,6 @@ namespace InfCy.GameCore
 
         public abstract void DrawInfo(Camera root, int y);
 
-        public abstract bool DoTurn();
+        public abstract void DoTurn();
     }
 }

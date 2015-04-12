@@ -85,6 +85,10 @@ namespace InfCy.GameCore
             {
                 Player.SetTarget(path);
             }
+            else
+            {
+                Player.UpdateTarget(path);
+            }
 
             gameCam.update();
             AnimationManager.Instance.Update(dt);
@@ -94,18 +98,7 @@ namespace InfCy.GameCore
         {
             gameCam.draw();
             CurrentMap.draw(gameCam);
-
-            if (path != null)
-            {
-                using (TCODColor color = new TCODColor(0, 0, 255))
-                {
-                    foreach (var p in path)
-                    {
-                        gameCam.setCharBackColor(p.X, p.Y, color, TCODBackgroundFlag.Add);
-                    }
-                }
-            }
-
+            
             scheduler.Draw(gameCam);
             
             playerCam.draw();

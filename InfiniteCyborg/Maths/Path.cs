@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace InfCy.Maths
 {
-    public class Path : Stack<IntVector>
+    public class Path : List<IntVector>
     {
         private class PathNode : IComparer<PathNode>, IEqualityComparer<PathNode>
         {
@@ -108,14 +108,26 @@ namespace InfCy.Maths
                         node = node.Parent;
                     }
 
-                    output.Reverse();
                     break;
                 }
 
             }
 
+            // This is fun to see sometimes.
             //if (output.Count == 0) visited.ToList().ForEach(o => output.Enqueue( new IntVector(o.X, o.Y)));
 
+            return output;
+        }
+
+        public void Push(IntVector v)
+        {
+            this.Insert(0, v);
+        }
+
+        public IntVector Pop()
+        {
+            var output = this[0];
+            this.RemoveAt(0);
             return output;
         }
     }

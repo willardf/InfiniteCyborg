@@ -1,4 +1,5 @@
-﻿using InfCy.Maths;
+﻿using InfCy.GameCore.Utilities;
+using InfCy.Maths;
 using libtcod;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,32 @@ namespace InfCy.GameCore
 {
     public class Player : Mover
     {
+        private class TargettingInfo
+        {
+            public Action<Path> waitForTarget;
+            public Action<Camera, Path> drawTarget;
+            public Path target;
+            public bool TargetSet { get; private set; }
+
+            public TargettingInfo(Player p)
+            {
+                Reset(p);
+            }
+
+            public void Reset(Player p)
+            {
+                this.TargetSet = false;
+                this.waitForTarget = (path) => { p.autoWalk = path; this.Reset(p); };
+                drawTarget = PathDrawers.DrawMovement;
+            }
+
+            public void SetTarget(Path target)
+            {
+                this.target = target;
+                this.TargetSet = true;
+            }
+        }
+
         #region Stats
         public byte Pyro { get; set; }
         public byte Elec { get; set; }
@@ -25,20 +52,21 @@ namespace InfCy.GameCore
 
         public int Weight { get { return Hardpoints.Sum(h => h.Weight); } }
         private Path autoWalk;
-        private Func<Path, bool> waitForTarget;
-        private Path target;
+
+        private readonly TargettingInfo targettingInfo;
 
         // TODO: Balance
         public override int Speed { get { return Math.Min(75, (int)(1024 - Weight)); } set { } }
         
         public Player()
         {
+            targettingInfo = new TargettingInfo(this);
             this.Name = "Player";
             Inventory = new List<Item>();
             var randy = TCODRandom.getInstance();
             Demeanor = Hostile.Friendly;
             var weap = new Weapon("Rando", new Genetics.BitField(Weapon.BitCount).Randomize(() => randy.getFloat(0, 1) > .5f));
-            weap.AddComponent(new Component() { Range = 5 });
+            weap.AddComponent(new Component() { Range = 5, Melee = false });
 
             Hardpoints = new List<Weapon>() { 
                 Weapon.Fists, 
@@ -49,6 +77,10 @@ namespace InfCy.GameCore
         public override void Draw(Camera root)
         {
             root.setChar(X, Y, '@');
+            if (targettingInfo != null)
+            {
+                targettingInfo.drawTarget(root, targettingInfo.target);
+            }
         }
 
         public override void DrawInfo(Camera info, int y)
@@ -59,7 +91,7 @@ namespace InfCy.GameCore
                 info.print(1, y + i + 2, "{0}", Hardpoints[i]);
             }
 
-            if (waitForTarget != null)
+            if (targettingInfo != null)
             {
                 info.print(1, info.Bottom - 5, "Targetting");
             }
@@ -67,6 +99,10 @@ namespace InfCy.GameCore
             info.print(1, info.Bottom - 4, "Tab for inventory");
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="key">True if key was handled</param>
+        /// <returns></returns>
         public bool HandleKey(KeyEvent key)
         {
             switch (key.button)
@@ -122,7 +158,8 @@ namespace InfCy.GameCore
                 if (hardpointIdx < this.Hardpoints.Count)
                 {
                     var weapon = this.Hardpoints[hardpointIdx];
-                    waitForTarget = target => { Attack(weapon, target.Last()); return true; };
+                    targettingInfo.waitForTarget = target => Attack(weapon, target.Last());
+                    targettingInfo.drawTarget = (c, p) => PathDrawers.DrawRangedTarget(c, p, weapon.Range);
                 }
             }
 
@@ -131,8 +168,7 @@ namespace InfCy.GameCore
 
         private bool Attack(Weapon weapon, IntVector t)
         {
-            waitForTarget = null;
-            target = null;
+            targettingInfo.Reset(this);
 
             this.Timer = 0;
             this.Duration = 100 - weapon.Speed;
@@ -145,32 +181,27 @@ namespace InfCy.GameCore
             GameScreen.CurrentMap.UpdateFov(this.X, this.Y);
         }
 
-        public override bool DoTurn()
+        public override void DoTurn()
         {
             if (autoWalk != null && autoWalk.Count > 0)
             {
                 var p = autoWalk.Pop();
                 Walk(p.X - X, p.Y - Y);
-                return true;
-            }else if (waitForTarget != null && target != null)
-            {
-                return waitForTarget(target);
-                
             }
+            else if (targettingInfo != null && targettingInfo.TargetSet)
+            {
+                targettingInfo.waitForTarget(targettingInfo.target);
+            }
+        }
 
-            return false;
+        public void UpdateTarget(Path target)
+        {
+            this.targettingInfo.target = target;
         }
 
         public void SetTarget(Path target)
         {
-            if (waitForTarget == null)
-            {
-                autoWalk = target;
-            }
-            else
-            {
-                this.target = target;
-            }
+            this.targettingInfo.SetTarget(target);
         }
 
         public void Dispose()

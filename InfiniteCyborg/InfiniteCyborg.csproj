@@ -69,6 +69,8 @@
     <Compile Include="GameCore\Drawable\Mover.cs" />
     <Compile Include="GameCore\Screens\NewGameScreen.cs" />
     <Compile Include="Anim\SequenceAnimation.cs" />
+    <Compile Include="GameCore\Utilities\Extensions.cs" />
+    <Compile Include="GameCore\Utilities\PathDrawers.cs" />
     <Compile Include="Genetics\Bit.cs" />
     <Compile Include="Genetics\Optimizer.cs" />
     <Compile Include="Genetics\Tribit.cs" />

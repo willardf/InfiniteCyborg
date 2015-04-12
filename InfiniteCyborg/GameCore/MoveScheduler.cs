@@ -10,6 +10,7 @@ namespace InfCy.GameCore
     {
         public const float SecsPerTurn = .1f;
         private float turnTimer = 0;
+        Mover lastMover;
 
         private List<Mover> movers = new List<Mover>();
         public List<Mover> Movers { get { return movers.ToList(); } }
@@ -24,10 +25,7 @@ namespace InfCy.GameCore
             turnTimer += dt;
             if (turnTimer > SecsPerTurn)
             {
-                if (CurrentMover.DoTurn())
-                {
-                    turnTimer = 0;
-                }
+                CurrentMover.DoTurn();
             }
         }
 
@@ -37,6 +35,12 @@ namespace InfCy.GameCore
             {
                 movers.Sort(TurnComparer.instance);
                 var output = movers.First();
+                if (lastMover != output)
+                {
+                    turnTimer = 0;
+                    lastMover = output;
+                }
+
                 if (output.Timer < output.Duration)
                 {
                     var diff = Math.Max(5, output.Duration - output.Timer);
@@ -48,13 +52,6 @@ namespace InfCy.GameCore
 
                 return output;
             }
-        }
-
-        public void EndTurn()
-        {
-            var output = CurrentMover;
-            
-            output.Timer = 0;
         }
 
         private class TurnComparer : IComparer<Mover>
@@ -76,6 +73,7 @@ namespace InfCy.GameCore
                 {
                     if (p.HandleKey(key))
                     {
+                        this.turnTimer = 0;
                         return true;
                     }
                 }
